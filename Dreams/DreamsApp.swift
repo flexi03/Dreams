@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct DreamsApp: App {
+    @AppStorage("isFirstStart") var isFirstStart: Bool = true
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isFirstStart {
+                IntroductionView(isFirstStart: $isFirstStart)
+            } else {
+                ContentView()
+            }
         }
     }
 }

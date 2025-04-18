@@ -14,7 +14,7 @@ struct AddDreamView: View {
     
     @State private var title = ""
     @State private var content = ""
-    @State private var selectedMood: Mood = .cosmic
+    @State private var selectedMood: Mood = .happy
     @State private var tags: [String] = []
     @State private var sleepQuality = 3
     
@@ -39,9 +39,9 @@ struct AddDreamView: View {
             .navigationTitle("Neuer Traumeintrag")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
-                }
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button("Abbrechen") { dismiss() }
+//                }
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Speichern") {

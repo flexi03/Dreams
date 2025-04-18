@@ -12,7 +12,11 @@ struct StatsView: View {
     @EnvironmentObject private var store: DreamStore
     
     var body: some View {
-        Text("Statistiken werden bald verfügbar sein!")
-            .navigationTitle("Analysen")
+        ScrollView {
+            Text("Statistiken werden bald verfügbar sein!")
+                .navigationTitle("Analysen")
+        }
+        .background(Design.backgroundGradient)
     }
+
 }

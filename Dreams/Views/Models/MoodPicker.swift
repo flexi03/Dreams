@@ -20,7 +20,7 @@ struct MoodPicker: View {
             HStack {
                 ForEach(Mood.allCases) { mood in
                     Button {
-                        selectedMood = mood
+                        self.selectedMood = mood
                     } label: {
                         Text(mood.rawValue)
                             .font(.system(size: 32))
@@ -35,3 +35,4 @@ struct MoodPicker: View {
         }
     }
 }
+

@@ -8,6 +8,8 @@
 import SwiftUI
 import AVFoundation // Für Sprachaufnahme
 
+// Diktieren
+
 // 3. Design Constants
 struct Design {
     static let gradient = LinearGradient(
@@ -53,9 +55,20 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
+// ContentView Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
+
+//// Intro Preview
+//struct IntroductionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        IntroductionView()
+//    }
+//}
+
 
 //// Testdaten
 //let sampleDream = DreamEntry(

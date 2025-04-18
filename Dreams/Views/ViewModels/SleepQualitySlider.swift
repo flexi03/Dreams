@@ -1,3 +1,11 @@
+//
+//  SleepQualitySlider.swift
+//  Dreams
+//
+//  Created by Felix Kircher on 16.04.25.
+//
+
+
 import SwiftUI
 
 struct SleepQualitySlider: View {
