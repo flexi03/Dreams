@@ -33,7 +33,6 @@ struct ContentView: View {
     enum Tab: String {
         case journal = "Tagebuch"
         case stats = "Statistiken"
-        case profile = "Profil"
     }
     
     var body: some View {
