@@ -95,27 +95,27 @@ struct DreamCard: View {
     }
 }
 
-// 8. Tag Cloud Komponente
-struct TagCloud: View {
-    let tags: [String]
-    let dream: DreamEntry
-
-    
-    var body: some View {
-        FlowLayout(alignment: .leading, spacing: 8, data: dream.tags) {_ in
-            ForEach(tags, id: \.self) { tag in
-                Text(tag)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        Capsule()
-                            .fill(Color.purple.opacity(0.2))
-                    )
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.purple.opacity(0.5), lineWidth: 1)
-                    )
-            }
-        }
-    }
-}
+//// 8. Tag Cloud Komponente
+//struct TagCloud: View {
+//    let tags: [String]
+//    let dream: DreamEntry
+//
+//    
+//    var body: some View {
+//        FlowLayout(alignment: .leading, spacing: 8, data: dream.tags) {_ in
+//            ForEach(tags, id: \.self) { tag in
+//                Text(tag)
+//                    .padding(.horizontal, 12)
+//                    .padding(.vertical, 6)
+//                    .background(
+//                        Capsule()
+//                            .fill(Color.purple.opacity(0.2))
+//                    )
+//                    .overlay(
+//                        Capsule()
+//                            .stroke(Color.purple.opacity(0.5), lineWidth: 1)
+//                    )
+//            }
+//        }
+//    }
+//}

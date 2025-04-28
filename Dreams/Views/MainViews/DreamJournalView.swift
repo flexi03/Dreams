@@ -35,6 +35,7 @@ struct DreamJournalView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                QuoteOfTheDay()
                 LazyVStack(spacing: 16) {
                     // Angepinnte Träume
                     if !pinnedDreams.isEmpty {

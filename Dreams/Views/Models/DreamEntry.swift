@@ -34,6 +34,13 @@ class DreamStore: ObservableObject {
     @Published var dreams: [DreamEntry] = [
         DreamEntry(
             date: Date().addingTimeInterval(-86400),
+            title: "Hi",
+            content: "Content",
+            mood: .happy,
+            tags: ["Tag1", "Tag2"],
+            sleepQuality: 1),
+        DreamEntry(
+            date: Date().addingTimeInterval(-86400),
             title: "Flug über die Berge",
             content: "Ich schwebte über schneebedeckte Gipfel, als plötzlich ein schwarzes Loch auf mich trat. Es war dunkel und es hörte sich ein lautes Knacken an. Ich konnte nicht fliehen. Es wurde immer dunkler und dann war ich wieder auf der Erde. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an.",
             mood: .cosmic,

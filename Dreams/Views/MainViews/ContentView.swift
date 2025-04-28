@@ -10,20 +10,7 @@ import AVFoundation // Für Sprachaufnahme
 
 // Diktieren
 
-// 3. Design Constants
-struct Design {
-    static let gradient = LinearGradient(
-        colors: [.indigo, .purple],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    
-    static let backgroundGradient = LinearGradient(
-        colors: [Color(.systemGray6), Color(.systemGray5)],
-        startPoint: .top,
-        endPoint: .bottom
-    )
-}
+
 
 // 4. Haupt-View mit TabBar
 struct ContentView: View {
@@ -55,11 +42,12 @@ struct ContentView: View {
 }
 
 // ContentView Preview
+// Füge einen Preview-Provider mit Dummy-Daten hinzu
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
-}
+} 
 
 //// Intro Preview
 //struct IntroductionView_Previews: PreviewProvider {
