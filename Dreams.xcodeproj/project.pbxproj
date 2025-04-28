@@ -10,9 +10,22 @@
 		DCB6272E2DA0834E00FC9D91 /* Dreams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DC696B532DBFCAF10057E135 /* Exceptions for "Dreams" folder in "Dreams" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DCB6272D2DA0834E00FC9D91 /* Dreams */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DCB627302DA0834E00FC9D91 /* Dreams */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DC696B532DBFCAF10057E135 /* Exceptions for "Dreams" folder in "Dreams" target */,
+			);
 			path = Dreams;
 			sourceTree = "<group>";
 		};
@@ -257,6 +270,7 @@
 				DEVELOPMENT_TEAM = 6728DRMDL9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Dreams/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Dreams;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -288,6 +302,7 @@
 				DEVELOPMENT_TEAM = 6728DRMDL9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Dreams/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Dreams;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
