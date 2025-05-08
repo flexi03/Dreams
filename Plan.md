@@ -8,7 +8,7 @@ Dreams ist eine iOS-App zum Aufzeichnen, Verwalten und Analysieren von Träumen.
 ### Grundfunktionen
 - [x] **Traumtagebuch**: Zentrale Ansicht mit Liste aller Traumeinträge
 - [x] **Einführungsbildschirm**: Wird beim ersten Start der App angezeigt
-- [ ] **Einstellungsbereich**: Grundlegende Benutzereinstellungen
+- [x] **Einstellungsbereich**: Grundlegende Benutzereinstellungen
 
 ### Traumeinträge
 - [x] **Detailliertes Datenmodell** für Traumeinträge mit:
@@ -23,7 +23,7 @@ Dreams ist eine iOS-App zum Aufzeichnen, Verwalten und Analysieren von Träumen.
 ### Benutzeroberfläche
 - [x] **Swipe-Aktionen** für Traumeinträge (Löschen, Anpinnen)
 - [x] **Suchfunktion** zum Durchsuchen von Traumeinträgen
-- [ ] **Tab-basierte Navigation** zwischen Hauptansichten
+- [x] **Tab-basierte Navigation** zwischen Hauptansichten
 - [x] **Zitat des Tages** in der Traumtagebuch-Ansicht
 
 ### Technische Features
@@ -47,20 +47,18 @@ Dreams ist eine iOS-App zum Aufzeichnen, Verwalten und Analysieren von Träumen.
 - [ ] **Exportfunktion** für Traumeinträge (PDF, Text)
 - [ ] **Backup & Sync** über iCloud
 
-### Langfristige Ziele
-- [ ] **Traumvorhersage** basierend auf Mustern und externen Faktoren
+### Optionale Features
+- [ ] **Traumvorhersage** basierend auf Mustern und externen Faktoren // Vielleicht zu advanced
 - [ ] **Schlaftracking-Integration** mit Apple Health oder anderen Wearables
 - [ ] **Community-Features** wie Traumforen oder gemeinsame Trauminterpretation
-- [ ] **Premium-Funktionen** mit Abonnementmodell
 - [ ] **Mehrsprachige Unterstützung**
-- [ ] **Web-Version** für plattformübergreifenden Zugriff
 
 ## Technische Roadmap
 
 ### Version 1.0
 - [x] Grundlegende Funktionalität des Traumtagebuchs
 - [x] Einfache Eingabe und Verwaltung von Traumeinträgen
-- [x] Stabile Datenspeicherung
+- [ ] Stabile Datenspeicherung
 
 ### Version 1.1
 - [ ] Statistik-Tab mit grundlegenden Auswertungen
@@ -71,11 +69,6 @@ Dreams ist eine iOS-App zum Aufzeichnen, Verwalten und Analysieren von Träumen.
 - [ ] Erweiterte Tagging-Funktionen
 - [ ] Verbesserte Suchfunktionen
 - [ ] Erste KI-gestützte Analysefeatures
-
-### Version 2.0
-- [ ] Vollständige Überarbeitung der Benutzeroberfläche
-- [ ] Cloud-Synchronisation
-- [ ] Community-Features
 
 ## Entwicklungsnotizen
 - App wurde am 04.04.25 initialisiert
