@@ -85,13 +85,12 @@ struct DreamCard: View {
                 .shadow(color: .black.opacity(0.1), radius: 5)
         )
         .background(
-            NavigationLink(
-                destination: DreamDetailView(dream: dream),
-                isActive: $showDetail,
-                label: { EmptyView() }
-            )
+            NavigationLink(value: dream, label: { EmptyView() })
             .hidden() // ← Optional, damit es keine Lücken im Layout gibt
         )
+        .navigationDestination(isPresented: $showDetail) {
+            DreamDetailView(dream: dream)
+        }
     }
 }
 

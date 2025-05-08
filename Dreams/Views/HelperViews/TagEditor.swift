@@ -11,6 +11,7 @@ import SwiftUI
 struct TagEditor: View {
     @Binding var tags: [String]
     @State private var newTag = ""
+//    @Binding var selectedTags: [String]
     
     let suggestions = ["Albtraum", "Luzid", "Wiederkehrend", "Prophetisch", "Kreativ"]
     
@@ -19,21 +20,26 @@ struct TagEditor: View {
             TextField("Neuer Tag", text: $newTag)
                 .onSubmit(addTag)
             
-            // Korrigiertes FlowLayout
-            FlowLayout(data: suggestions) { suggestion in
-                Button {
-                    if !tags.contains(suggestion) {
-                        tags.append(suggestion)
+            HStack {
+                ForEach(tags.indices, id: \.self) { tag in
+                    Button {
+                        
+                    } label: {
+                        Text(suggestions.first ?? "")
+                            .padding(6)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                            .contentShape(RoundedRectangle(cornerRadius: 8))
                     }
-                } label: {
-                    Text(suggestion)
-                        .padding(6)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
+                    .buttonStyle(.plain)
                 }
+                
             }
+            
+            
         }
     }
+    
     
     private func addTag() {
         let trimmedTag = newTag.trimmingCharacters(in: .whitespaces)

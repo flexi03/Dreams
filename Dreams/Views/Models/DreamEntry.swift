@@ -18,7 +18,7 @@ enum Mood: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-struct DreamEntry: Identifiable {
+struct DreamEntry: Identifiable, Hashable {
     let id = UUID()
     var isPinned: Bool = false
     let date: Date
@@ -27,6 +27,8 @@ struct DreamEntry: Identifiable {
     var mood: Mood
     var tags: [String]
     var sleepQuality: Int // 1-5
+    var audioURL: URL? // URL zur gespeicherten Audiodatei
+    var sample: Bool
 }
 
 // 2. Data Store mit Beispiel-Daten
@@ -38,14 +40,18 @@ class DreamStore: ObservableObject {
             content: "Content",
             mood: .happy,
             tags: ["Tag1", "Tag2"],
-            sleepQuality: 1),
+            sleepQuality: 1,
+            audioURL: nil,
+            sample: true),
         DreamEntry(
             date: Date().addingTimeInterval(-86400),
             title: "Flug über die Berge",
             content: "Ich schwebte über schneebedeckte Gipfel, als plötzlich ein schwarzes Loch auf mich trat. Es war dunkel und es hörte sich ein lautes Knacken an. Ich konnte nicht fliehen. Es wurde immer dunkler und dann war ich wieder auf der Erde. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an. Es fühlte sich so real an.",
             mood: .cosmic,
             tags: ["Luzid", "Freiheit"],
-            sleepQuality: 4
+            sleepQuality: 4,
+            audioURL: nil,
+            sample: true
         ),
         DreamEntry(
             date: Date().addingTimeInterval(-172800),
@@ -53,7 +59,9 @@ class DreamStore: ObservableObject {
             content: "Ein Labyrinth aus alten Steinen, das nie enden wollte und mich in einen Albtraum verschluckte.",
             mood: .nightmare,
             tags: ["Albtraum", "Wiederkehrend"],
-            sleepQuality: 2
+            sleepQuality: 2,
+            audioURL: nil,
+            sample: true
         ),
         DreamEntry(
             date: Date().addingTimeInterval(-259200),
@@ -61,7 +69,9 @@ class DreamStore: ObservableObject {
             content: "Ich war auf einer Insel, die im Wind flog und ich konnte mit den Wellen tanzen. Es war ein schöner Tag. Es war ein schöner Tag. ",
             mood: .happy,
             tags: ["Natur", "Freude"],
-            sleepQuality: 5
+            sleepQuality: 5,
+            audioURL: nil,
+            sample: true
         ),
         DreamEntry(
             date: Date().addingTimeInterval(-345600),
@@ -69,7 +79,9 @@ class DreamStore: ObservableObject {
             content: "Ich rode in einer stormhaften Regenfälle. Es regnete ständig und ich konnte nicht bremsen. Es regnete ständig und ich konnte nicht bremsen. Es regnete ständig und ich konnte nicht bremsen.",
             mood: .angry,
             tags: ["Rennen", "Regen"],
-            sleepQuality: 1
+            sleepQuality: 1,
+            audioURL: nil,
+            sample: true
         )
     ]
     public func deleteDream(_ dream: DreamEntry) {

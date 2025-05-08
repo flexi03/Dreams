@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct DreamDetailView: View {
     let dream: DreamEntry
@@ -50,6 +51,14 @@ struct DreamDetailView: View {
                     Text("Wiederkehrende Themen: \(keywords.joined(separator: ", "))")
                         .italic()
                 }
+                
+                if let audioURL = dream.audioURL {
+                    VStack(alignment: .leading) {
+                        Text("Sprachnotiz")
+                            .font(.headline)
+                        AudioRecorderView(audioURL: .constant(audioURL))
+                    }
+                }
             }
             .padding()
         }
@@ -66,6 +75,8 @@ struct DreamDetailView: View {
         content: "Testinhalt",
         mood: .cosmic,
         tags: ["Test"],
-        sleepQuality: 3 // Hinzugefügter Parameter
+        sleepQuality: 3,
+        audioURL: nil,
+        sample: true
     ))
 }

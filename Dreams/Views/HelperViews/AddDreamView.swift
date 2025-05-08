@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import AVFoundation
 
-// 9. Erweitertes AddDreamView mit Sleep Quality Picker
+// 9. Erweitertes AddDreamView mit Sleep Quality Picker und Audioaufnahme
 struct AddDreamView: View {
     @EnvironmentObject private var store: DreamStore
     @Environment(\.dismiss) private var dismiss
@@ -17,6 +18,7 @@ struct AddDreamView: View {
     @State private var selectedMood: Mood = .happy
     @State private var tags: [String] = []
     @State private var sleepQuality = 3
+    @State private var audioURL: URL? = nil
     
     var body: some View {
         NavigationStack {
@@ -35,6 +37,10 @@ struct AddDreamView: View {
                 Section("Tags") {
                     TagEditor(tags: $tags)
                 }
+                
+                Section("Sprachnotiz") {
+                    AudioRecorderView(audioURL: $audioURL)
+                }
             }
             .navigationTitle("Neuer Traumeintrag")
             .navigationBarTitleDisplayMode(.inline)
@@ -51,7 +57,9 @@ struct AddDreamView: View {
                             content: content,
                             mood: selectedMood,
                             tags: tags,
-                            sleepQuality: sleepQuality
+                            sleepQuality: sleepQuality,
+                            audioURL: audioURL,
+                            sample: false
                         )
                         store.dreams.insert(newDream, at: 0)
                         dismiss()

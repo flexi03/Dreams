@@ -25,11 +25,14 @@ struct MoodPicker: View {
                         Text(mood.rawValue)
                             .font(.system(size: 32))
                             .padding(8)
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
                             .background(
                                 Circle()
                                     .fill(selectedMood == mood ? Color.purple.opacity(0.2) : Color.clear)
                             )
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }
