@@ -62,6 +62,8 @@ struct DreamDetailView: View {
             }
             .padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Design.backgroundGradient)
         .navigationTitle(dream.title)
     }
 }
