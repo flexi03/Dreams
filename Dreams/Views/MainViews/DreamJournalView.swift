@@ -71,6 +71,7 @@ struct DreamJournalView: View {
                             .padding(.horizontal)
                     }
                 }
+                .padding(.top)
                 .scrollTargetLayout()
             }
 //            .scrollIndicators(.hidden)
