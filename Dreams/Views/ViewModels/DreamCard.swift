@@ -90,6 +90,7 @@ struct DreamCard: View {
         )
         .navigationDestination(isPresented: $showDetail) {
             DreamDetailView(dream: dream)
+                .background(Design.backgroundGradient)
         }
     }
 }

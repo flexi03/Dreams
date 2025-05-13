@@ -16,6 +16,7 @@ struct StatsView: View {
             Text("Statistiken werden bald verfügbar sein!")
                 .navigationTitle("Analysen")
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Design.backgroundGradient)
     }
 
