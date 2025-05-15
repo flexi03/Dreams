@@ -14,7 +14,7 @@ import AVFoundation // Für Sprachaufnahme
 
 // 4. Haupt-View mit TabBar
 struct ContentView: View {
-    @StateObject private var store = DreamStore()
+    @StateObject private var store = DreamStoreSampleData()
     @State private var selectedTab: Tab = .journal
     
     enum Tab: String {
@@ -46,6 +46,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
     }
 } 
 

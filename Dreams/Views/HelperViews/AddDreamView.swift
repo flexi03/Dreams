@@ -10,7 +10,7 @@ import AVFoundation
 
 // 9. Erweitertes AddDreamView mit Sleep Quality Picker und Audioaufnahme
 struct AddDreamView: View {
-    @EnvironmentObject private var store: DreamStore
+    @EnvironmentObject private var store: DreamStoreSampleData
     @Environment(\.dismiss) private var dismiss
     
     @State private var title = ""

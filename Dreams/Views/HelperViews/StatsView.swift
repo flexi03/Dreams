@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct StatsView: View {
-    @EnvironmentObject private var store: DreamStore
+    @EnvironmentObject private var store: DreamStoreSampleData
     
     var body: some View {
         ScrollView {

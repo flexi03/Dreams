@@ -31,8 +31,8 @@ struct DreamEntry: Identifiable, Hashable {
     var sample: Bool
 }
 
-// 2. Data Store mit Beispiel-Daten
-class DreamStore: ObservableObject {
+// 2. Data Store Sample Data mit Beispiel-Daten
+class DreamStoreSampleData: ObservableObject {
     @Published var dreams: [DreamEntry] = [
         DreamEntry(
             date: Date().addingTimeInterval(-86400),

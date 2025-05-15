@@ -2,6 +2,13 @@ from manim import *
 import numpy as np
 import os
 
+# Konfiguration für quadratisches Ausgabeformat
+config.frame_height = 8.0
+config.frame_width = 8.0
+config.pixel_height = 1080
+config.pixel_width = 1080
+config.frame_size = (1080, 1080)
+
 class AppIconAnimation(Scene):
     def construct(self):
         # App-Farbe
@@ -21,7 +28,7 @@ class AppIconAnimation(Scene):
         
         # Erstelle ein quadratisches Hintergrund-Rechteck mit abgerundeten Ecken
         rounded_square = RoundedRectangle(
-            corner_radius=0.5,
+            corner_radius=1,
             height=5,
             width=5,
             fill_opacity=1,
@@ -51,40 +58,39 @@ class AppIconAnimation(Scene):
             # Wenn es nur ein Submobject gibt, verwenden wir das
             moon_shape = svg_mobject
         
-        # Erstelle den Mond-Umriss
-        moon_outline = moon_shape.copy()
-        moon_outline.scale(2)
-        moon_outline.set_fill(opacity=0)
-        moon_outline.set_stroke(WHITE, opacity=1, width=2)
+        # Erstelle den Mond-Umriss mit dünner Linie
+        moon_outline_thin = moon_shape.copy()
+        moon_outline_thin.scale(2)
+        moon_outline_thin.set_fill(opacity=0)
+        moon_outline_thin.set_stroke(WHITE, opacity=1, width=2)
         
-        # Erstelle eine gefüllte Version des Monds
-        moon_filled = moon_shape.copy()
-        moon_filled.scale(2)
-        moon_filled.set_fill(WHITE, opacity=1)
-        moon_filled.set_stroke(WHITE, opacity=0.5, width=1)
+        # Erstelle den Mond-Umriss mit dicker Linie für die finale Darstellung
+        moon_outline_thick = moon_shape.copy()
+        moon_outline_thick.scale(2)
+        moon_outline_thick.set_fill(opacity=0)
+        moon_outline_thick.set_stroke(WHITE, opacity=1, width=35)  # Dickere Linie statt Füllung
         
         # Zentriere die Monde im Rechteck
-        moon_outline.move_to(rounded_square.get_center())
-        moon_filled.move_to(rounded_square.get_center())
+        moon_outline_thin.move_to(rounded_square.get_center())
+        moon_outline_thick.move_to(rounded_square.get_center())
         
         # Animation des Zeichnens der Umrandung mit angepasstem Startpunkt
         self.play(
-            DrawBorderThenFill(moon_outline, run_time=1.5, stroke_width=2, 
+            DrawBorderThenFill(moon_outline_thin, run_time=1.5, stroke_width=2, 
                               stroke_color=WHITE, fill_opacity=0,
                               draw_border_animation_config={"run_time": 1.5, "rate_func": linear}),
             rate_func=smooth
         )
         
-        # Füllen des Monds
+        # Animation zum Verdicken der Umrandung (statt Füllen)
         self.play(
-            FadeIn(moon_filled, run_time=0.6),
-            FadeOut(moon_outline, run_time=0.5),
+            Transform(moon_outline_thin, moon_outline_thick, run_time=0.6),
             rate_func=smooth
         )
         self.wait(0.5)
         
         # Erstelle eine Gruppe für das Icon
-        icon_group = Group(rounded_square, moon_filled)
+        icon_group = Group(rounded_square, moon_outline_thin)
         
         # Erstelle den Text "Dreams" in Helvetica Bold
         app_name = Text("Dreams", font="Helvetica", weight="BOLD", color=WHITE, font_size=64)
@@ -107,17 +113,17 @@ class AppIconAnimation(Scene):
         
         self.wait(0.8)
         
-        # Alles zusammen kleiner machen und ausblenden
-        final_group = Group(icon_group, app_name)
-        self.play(
-            final_group.animate.scale(0.7),
-            run_time=1.0,
-            rate_func=smooth
-        )
-        self.play(
-            FadeOut(final_group, run_time=1.2),
-            rate_func=smooth
-        )
+        # # Alles zusammen kleiner machen und ausblenden
+        # final_group = Group(icon_group, app_name)
+        # self.play(
+        #     final_group.animate.scale(0.7),
+        #     run_time=1.0,
+        #     rate_func=smooth
+        # )
+        # self.play(
+        #     FadeOut(final_group, run_time=1.2),
+        #     rate_func=smooth
+        # )
         self.wait(0.5)
         
     def create_placeholder_animation(self, app_color):
@@ -196,15 +202,3 @@ class AppIconAnimation(Scene):
         )
         
         
-        # Alles zusammen kleiner machen und ausblenden
-        final_group = Group(icon_group, app_name)
-        self.play(
-            final_group.animate.scale(0.7),
-            run_time=0.7,
-            rate_func=smooth
-        )
-        self.play(
-            FadeOut(final_group, run_time=0.2),
-            rate_func=smooth
-        )
-        self.wait(0.5)

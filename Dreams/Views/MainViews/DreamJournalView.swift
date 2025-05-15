@@ -9,7 +9,7 @@ import SwiftUI
 
 // 5. Verbessertes Journal-View mit Swipe-Actions
 struct DreamJournalView: View {
-    @EnvironmentObject private var store: DreamStore
+    @EnvironmentObject private var store: DreamStoreSampleData
     @State private var searchText = ""
     
     // Gefilterte und sortierte Träume
@@ -106,5 +106,6 @@ struct DreamJournalView: View {
 
 #Preview {
     DreamJournalView()
-        .environmentObject(DreamStore())
+        .environmentObject(DreamStoreSampleData())
+        .preferredColorScheme(.dark)
 }
