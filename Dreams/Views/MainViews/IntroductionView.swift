@@ -45,8 +45,8 @@ struct IntroductionView: View {
                 Button() {
                     withAnimation {
                         isFirstStart.toggle()
+                        print(isFirstStart)
                     }
-                    print(isFirstStart)
                 } label: {
                     Text("Starte dein Traumabenteuer!")
                         .foregroundColor(.black)
