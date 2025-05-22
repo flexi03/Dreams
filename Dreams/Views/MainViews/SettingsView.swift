@@ -13,7 +13,7 @@ struct SettingsView: View {
         Form {
             Text("Einstellungen")
             Toggle("LaunchScreen anzeigen", isOn: $isFirstStart)
-                .onChange(of: isFirstStart) { _ in
+                .onChange(of: isFirstStart) {
                     withAnimation {
                         // Animation wird ausgelöst
                     }
