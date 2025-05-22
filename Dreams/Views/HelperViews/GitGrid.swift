@@ -82,13 +82,13 @@ struct GitGrid: View {
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
-}
-
-private func color(for count: Int) -> Color {
-    switch count {
-    case 0: return Color.gray.opacity(0.1)
-    case 1: return Color.green.opacity(0.4)
-    case 2...3: return Color.green.opacity(0.7)
-    default: return Color.green
+    
+    private func color(for count: Int) -> Color {
+        switch count {
+        case 0: return Color.gray.opacity(0.1)
+        case 1: return Color.green.opacity(0.4)
+        case 2...3: return Color.green.opacity(0.7)
+        default: return Color.green
+        }
     }
 }
