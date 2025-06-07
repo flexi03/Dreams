@@ -286,6 +286,7 @@ class QuoteViewModel: ObservableObject {
         do {
             let quote = try await networkManager.fetchRandomQuote(language: language)
             print("Quote geladen: \(quote.content) von \(quote.author)") // Debug-Log
+            ToastManager.shared.showDebug("Quote von \(quote.author) geladen.", details: "Quote hat folgenden Inhalt: \(quote.content) \n \nJahr: \(quote.date ?? "nicht angegeben")")
             currentQuote = quote
             saveQuote(quote)
         } catch {

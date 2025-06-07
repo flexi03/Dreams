@@ -25,6 +25,8 @@ struct DreamsApp: App {
                         .preferredColorScheme(.dark)
                 }
             }
+            .withToasts()
+            .preferredColorScheme(.dark)
             .animation(.easeInOut(duration: 0.8), value: isFirstStart)
         }
     }

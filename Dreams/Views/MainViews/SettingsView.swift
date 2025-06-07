@@ -11,14 +11,30 @@ struct SettingsView: View {
     @AppStorage("isFirstStart") var isFirstStart: Bool = true
     var body: some View {
         Form {
-            Text("Einstellungen")
-            Toggle("LaunchScreen anzeigen", isOn: $isFirstStart)
+            Section("LaunchScreen") {
+                Button("LaunchScreen testen") {
+                    isFirstStart.toggle()
+                }
                 .onChange(of: isFirstStart) {
                     withAnimation {
-                        // Animation wird ausgelöst
+                        ToastManager.shared.showDebug("LaunchScreen wird angezeigt.", details: "isFirstStart: \(isFirstStart)")
                     }
                 }
+//                Toggle("LaunchScreen anzeigen", isOn: $isFirstStart)
+//                    .onChange(of: isFirstStart) {
+//                        withAnimation {
+//                            // Animation wird ausgelöst
+//                        }
+//                    }
+            }
+            
+            Section("Toasts aka Notifications") {
+                NavigationLink(destination: ToastTesterView()) {
+                    Text("Toast Tester View")
+                }
+            }
         }
+//        .withToasts()
         .navigationTitle("Einstellungen")
     }
 }
