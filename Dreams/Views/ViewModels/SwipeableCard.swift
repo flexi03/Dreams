@@ -23,11 +23,14 @@ struct SwipeableCard: View {
                 deleteBackground
             }
             
-            DreamCard(dream: dream)
-                .background(.background)
-                .cornerRadius(16)
-                .offset(x: offsetX)
-                .gesture(dragGesture)
+            NavigationLink(value: dream) {
+                DreamCard(dream: dream)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .background(.background)
+            .cornerRadius(16)
+            .offset(x: offsetX)
+            .gesture(dragGesture)
         }
         .padding(.horizontal)
         .animation(.interactiveSpring(), value: offsetX)

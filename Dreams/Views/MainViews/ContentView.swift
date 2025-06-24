@@ -15,6 +15,7 @@ import AVFoundation // Für Sprachaufnahme
 // 4. Haupt-View mit TabBar
 struct ContentView: View {
     @StateObject private var store = DreamStoreSampleData()
+    @EnvironmentObject private var activityManager: DreamActivityManager
     @State private var selectedTab: Tab = .journal
     
     enum Tab: String {
@@ -24,20 +25,28 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            DreamJournalView()
-                .tabItem {
-                    Label("Traumtagebuch", systemImage: "book.closed")
-                }
-                .tag(Tab.journal)
+            NavigationStack {
+                DreamJournalView()
+            }
+            .tabItem {
+                Label("Traumtagebuch", systemImage: "book.closed")
+            }
+            .tag(Tab.journal)
             
-            StatsView()
-                .tabItem {
-                    Label("Analysen", systemImage: "chart.bar")
-                }
-                .tag(Tab.stats)
+            NavigationStack {
+                StatsView()
+            }
+            .tabItem {
+                Label("Analysen", systemImage: "chart.bar")
+            }
+            .tag(Tab.stats)
         }
         .tint(.purple)
         .environmentObject(store)
+        .onAppear {
+            // ActivityManager mit Store verbinden
+            activityManager.setStore(store)
+        }
     }
 }
 
@@ -46,6 +55,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .withToasts()
             .preferredColorScheme(.dark)
     }
 } 

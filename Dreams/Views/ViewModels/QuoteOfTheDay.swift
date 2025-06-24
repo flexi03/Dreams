@@ -30,7 +30,7 @@ struct QuoteOfTheDay: View {
                     
                     Button(action: {
                         Task {
-                            await quoteViewModel.loadRandomQuote()
+                            await quoteViewModel.loadRandomQuote(showToast: true)
                         }
                     }) {
                         Image(systemName: "arrow.clockwise.circle")
@@ -279,14 +279,16 @@ class QuoteViewModel: ObservableObject {
     
     private let networkManager = NetworkManager.shared
     
-    func loadRandomQuote(language: String = "de") async {
+    func loadRandomQuote(language: String = "de", showToast: Bool = false) async {
         isLoading = true
         error = nil
         
         do {
             let quote = try await networkManager.fetchRandomQuote(language: language)
             print("Quote geladen: \(quote.content) von \(quote.author)") // Debug-Log
-            ToastManager.shared.showDebug("Quote von \(quote.author) geladen.", details: "Quote hat folgenden Inhalt: \(quote.content) \n \nJahr: \(quote.date ?? "nicht angegeben")")
+            if showToast {
+                ToastManager.shared.showDebug("Quote von \(quote.author) geladen.", details: "Quote hat folgenden Inhalt: \(quote.content) \n \nJahr: \(quote.date ?? "nicht angegeben")")
+            }
             currentQuote = quote
             saveQuote(quote)
         } catch {

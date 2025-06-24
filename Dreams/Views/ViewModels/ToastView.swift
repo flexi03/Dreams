@@ -123,7 +123,7 @@ struct ToastView: View {
                 .stroke(toast.type.color.opacity(0.3), lineWidth: isExpanded ? 2 : 1)
         )
         .scaleEffect(isExpanded ? 1.0 : scaleForIndex)
-        .offset(y: isExpanded ? 0 : (offsetForIndex + dragOffset.height))
+        .offset(y: isExpanded ? -66 : (offsetForIndex + dragOffset.height))
         .opacity(isExpanded ? 1.0 : opacityForIndex)
         .zIndex(isExpanded ? 1000 : Double(toastManager.toasts.count - index - 1)) // Higher index = higher z-index, newest (index 0) gets highest
         .gesture(
@@ -155,7 +155,7 @@ struct ToastView: View {
     }
     
     private var offsetForIndex: CGFloat {
-        let baseOffset: CGFloat = 0
+        let baseOffset: CGFloat = -66
         let offsetIncrease: CGFloat = 8 // Changed to positive to move older toasts up
         return baseOffset + (CGFloat(index) * offsetIncrease)
     }
@@ -297,5 +297,6 @@ struct ToastTesterView: View {
 struct ToastTesterView_Previews: PreviewProvider {
     static var previews: some View {
         ToastTesterView()
+            .withToasts()
     }
 }

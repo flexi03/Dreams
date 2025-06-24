@@ -6,11 +6,58 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DC14C08D2DF4F8A8009642F8 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC14C08C2DF4F8A8009642F8 /* WidgetKit.framework */; };
+		DC14C08F2DF4F8A8009642F8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC14C08E2DF4F8A8009642F8 /* SwiftUI.framework */; };
+		DC14C09C2DF4F8A9009642F8 /* DreamsWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DC14C08A2DF4F8A8009642F8 /* DreamsWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DC14C09A2DF4F8A9009642F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCB627262DA0834E00FC9D91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC14C0892DF4F8A8009642F8;
+			remoteInfo = DreamsWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC14C0A12DF4F8A9009642F8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DC14C09C2DF4F8A9009642F8 /* DreamsWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		DC14C08A2DF4F8A8009642F8 /* DreamsWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DreamsWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC14C08C2DF4F8A8009642F8 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		DC14C08E2DF4F8A8009642F8 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		DCB6272E2DA0834E00FC9D91 /* Dreams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DC14C0A02DF4F8A9009642F8 /* Exceptions for "DreamsWidget" folder in "DreamsWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DC14C0892DF4F8A8009642F8 /* DreamsWidgetExtension */;
+		};
+		DC14C0A72DF4FB0B009642F8 /* Exceptions for "DreamsWidget" folder in "Dreams" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AddDreamIntent.swift,
+			);
+			target = DCB6272D2DA0834E00FC9D91 /* Dreams */;
+		};
 		DC696B532DBFCAF10057E135 /* Exceptions for "Dreams" folder in "Dreams" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -21,6 +68,15 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		DC14C0902DF4F8A8009642F8 /* DreamsWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DC14C0A72DF4FB0B009642F8 /* Exceptions for "DreamsWidget" folder in "Dreams" target */,
+				DC14C0A02DF4F8A9009642F8 /* Exceptions for "DreamsWidget" folder in "DreamsWidgetExtension" target */,
+			);
+			path = DreamsWidget;
+			sourceTree = "<group>";
+		};
 		DCB627302DA0834E00FC9D91 /* Dreams */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +88,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DC14C0872DF4F8A8009642F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC14C08F2DF4F8A8009642F8 /* SwiftUI.framework in Frameworks */,
+				DC14C08D2DF4F8A8009642F8 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DCB6272B2DA0834E00FC9D91 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,10 +107,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DC14C08B2DF4F8A8009642F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DC14C08C2DF4F8A8009642F8 /* WidgetKit.framework */,
+				DC14C08E2DF4F8A8009642F8 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DCB627252DA0834E00FC9D91 = {
 			isa = PBXGroup;
 			children = (
 				DCB627302DA0834E00FC9D91 /* Dreams */,
+				DC14C0902DF4F8A8009642F8 /* DreamsWidget */,
+				DC14C08B2DF4F8A8009642F8 /* Frameworks */,
 				DCB6272F2DA0834E00FC9D91 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				DCB6272E2DA0834E00FC9D91 /* Dreams.app */,
+				DC14C08A2DF4F8A8009642F8 /* DreamsWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +138,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		DC14C0892DF4F8A8009642F8 /* DreamsWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC14C09D2DF4F8A9009642F8 /* Build configuration list for PBXNativeTarget "DreamsWidgetExtension" */;
+			buildPhases = (
+				DC14C0862DF4F8A8009642F8 /* Sources */,
+				DC14C0872DF4F8A8009642F8 /* Frameworks */,
+				DC14C0882DF4F8A8009642F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DC14C0902DF4F8A8009642F8 /* DreamsWidget */,
+			);
+			name = DreamsWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = DreamsWidgetExtension;
+			productReference = DC14C08A2DF4F8A8009642F8 /* DreamsWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DCB6272D2DA0834E00FC9D91 /* Dreams */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DCB627392DA0834E00FC9D91 /* Build configuration list for PBXNativeTarget "Dreams" */;
@@ -68,10 +167,12 @@
 				DCB6272A2DA0834E00FC9D91 /* Sources */,
 				DCB6272B2DA0834E00FC9D91 /* Frameworks */,
 				DCB6272C2DA0834E00FC9D91 /* Resources */,
+				DC14C0A12DF4F8A9009642F8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DC14C09B2DF4F8A9009642F8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DCB627302DA0834E00FC9D91 /* Dreams */,
@@ -90,9 +191,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1630;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					DC14C0892DF4F8A8009642F8 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					DCB6272D2DA0834E00FC9D91 = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -113,11 +217,19 @@
 			projectRoot = "";
 			targets = (
 				DCB6272D2DA0834E00FC9D91 /* Dreams */,
+				DC14C0892DF4F8A8009642F8 /* DreamsWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DC14C0882DF4F8A8009642F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DCB6272C2DA0834E00FC9D91 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +240,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DC14C0862DF4F8A8009642F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DCB6272A2DA0834E00FC9D91 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +256,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		DC14C09B2DF4F8A9009642F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC14C0892DF4F8A8009642F8 /* DreamsWidgetExtension */;
+			targetProxy = DC14C09A2DF4F8A9009642F8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		DC14C09E2DF4F8A9009642F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6728DRMDL9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DreamsWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DreamsWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cinematicfelix.de.Dreams.DreamsWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DC14C09F2DF4F8A9009642F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6728DRMDL9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DreamsWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DreamsWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cinematicfelix.de.Dreams.DreamsWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		DCB627372DA0834E00FC9D91 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -197,6 +380,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -254,6 +438,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -275,6 +460,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Diese App benötigt Zugriff auf das Mikrofon, um Sprachnotizen für deine Traumeinträge aufzunehmen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Dreams kann Dir so deine Traumaudios in Text umwandeln.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -310,6 +496,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Diese App benötigt Zugriff auf das Mikrofon, um Sprachnotizen für deine Traumeinträge aufzunehmen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Dreams kann Dir so deine Traumaudios in Text umwandeln.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,6 +519,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DC14C09D2DF4F8A9009642F8 /* Build configuration list for PBXNativeTarget "DreamsWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC14C09E2DF4F8A9009642F8 /* Debug */,
+				DC14C09F2DF4F8A9009642F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DCB627292DA0834E00FC9D91 /* Build configuration list for PBXProject "Dreams" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -33,72 +33,115 @@ struct DreamJournalView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+                // Quote of the Day
                 QuoteOfTheDay()
-                LazyVStack(spacing: 16) {
-                    // Angepinnte Träume
-                    if !pinnedDreams.isEmpty {
-                        Section {
-                            ForEach(pinnedDreams) { dream in
-                                SwipeableCard(
-                                    dream: dream,
-                                    onDelete: { withAnimation { store.deleteDream(dream) } },
-                                    onPin: { withAnimation { store.togglePin(dream) } }
-                                )
-                            }
-                        } header: {
-                            Text("Angepinnt")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                        }
-                    }
-                    
-                    // Alle Träume
+                
+                // Angepinnte Träume
+                if !pinnedDreams.isEmpty {
                     Section {
-                        ForEach(unpinnedDreams) { dream in
-                            SwipeableCard(
-                                dream: dream,
-                                onDelete: { withAnimation { store.deleteDream(dream) } },
-                                onPin: { withAnimation { store.togglePin(dream) } }
-                            )
+                        ForEach(pinnedDreams) { dream in
+                            let currentDreamState = store.dreams.first(where: { $0.id == dream.id })
+                            DreamCard(dream: currentDreamState ?? dream)
+                                .padding(.horizontal)
+                                .contextMenu {
+                                    Button(action: { 
+                                        withAnimation { 
+                                            store.togglePin(dream) 
+                                        } 
+                                    }) {
+                                        Label((currentDreamState?.isPinned ?? dream.isPinned) ? "Entpinnen" : "Anpinnen", 
+                                              systemImage: (currentDreamState?.isPinned ?? dream.isPinned) ? "pin.slash" : "pin")
+                                    }
+                                    Button(role: .destructive, action: { 
+                                        withAnimation { 
+                                            store.deleteDream(dream) 
+                                        } 
+                                    }) {
+                                        Label("Löschen", systemImage: "trash")
+                                    }
+                                }
                         }
                     } header: {
-                        Text("Alle Träume")
+                        Text("Angepinnt")
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
                     }
                 }
-                .padding(.top)
-                .scrollTargetLayout()
+                
+                // Alle Träume
+                Section {
+                    ForEach(unpinnedDreams) { dream in
+                        let currentDreamState = store.dreams.first(where: { $0.id == dream.id })
+                        DreamCard(dream: currentDreamState ?? dream)
+                            .padding(.horizontal)
+                            .contextMenu {
+                                Button(action: { 
+                                    withAnimation { 
+                                        store.togglePin(dream) 
+                                    } 
+                                }) {
+                                    Label((currentDreamState?.isPinned ?? dream.isPinned) ? "Entpinnen" : "Anpinnen", 
+                                          systemImage: (currentDreamState?.isPinned ?? dream.isPinned) ? "pin.slash" : "pin")
+                                }
+                                Button(role: .destructive, action: { 
+                                    withAnimation { 
+                                        store.deleteDream(dream) 
+                                    } 
+                                }) {
+                                    Label("Löschen", systemImage: "trash")
+                                }
+                            }
+                    }
+                } header: {
+                    Text("Alle Träume")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                }
             }
-//            .scrollIndicators(.hidden)
-//                        .contentMargins(.vertical, 16)
-            .background(Design.backgroundGradient)
-            .navigationTitle("Traumtagebuch")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
+            .padding(.top)
+            .scrollTargetLayout()
+        }
+        .background(Design.backgroundGradient)
+        .navigationTitle("Traumtagebuch")
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
+                    // wenn ios 26
+                    if #available(iOS 26.0, *) {
+                        Image(systemName: "person")
+                            .bold()
+                    } else {
                         Image(systemName: "person.circle.fill")
                             .symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        AddDreamView()
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    AddDreamView()
+                } label: {
+                    // wenn ios 26
+                    if #available(iOS 26.0, *) {
+                        Image(systemName: "plus")
+                            .bold()
+                    } else {
+                        Image(systemName: "plus")
                             .symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Suche in deinen Träumen")
+        }
+        .searchable(text: $searchText, prompt: "Suche in deinen Träumen")
+        .navigationDestination(for: DreamEntry.self) { dream in
+            DreamDetailView(dream: dream)
         }
     }
 }

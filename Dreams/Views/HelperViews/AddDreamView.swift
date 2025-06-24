@@ -8,9 +8,10 @@
 import SwiftUI
 import AVFoundation
 
-// 9. Erweitertes AddDreamView mit Sleep Quality Picker und Audioaufnahme
+// 9. Erweitertes AddDreamView mit Sleep Quality Picker
 struct AddDreamView: View {
     @EnvironmentObject private var store: DreamStoreSampleData
+    @EnvironmentObject private var activityManager: DreamActivityManager
     @Environment(\.dismiss) private var dismiss
     
     @State private var title = ""
@@ -18,7 +19,17 @@ struct AddDreamView: View {
     @State private var selectedMood: Mood = .happy
     @State private var tags: [String] = []
     @State private var sleepQuality = 3
-    @State private var audioURL: URL? = nil
+    @State private var audioMemos: [AudioMemo] = []
+    
+    private var canSave: Bool {
+        let hasTitle = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasContent = !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasTranscript = audioMemos.contains { memo in
+            memo.transcript?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+        }
+        
+        return hasTitle && (hasContent || hasTranscript)
+    }
     
     var body: some View {
         NavigationStack {
@@ -38,33 +49,50 @@ struct AddDreamView: View {
                     TagEditor(tags: $tags)
                 }
                 
-                Section("Sprachnotiz") {
-                    AudioRecorderView(audioURL: $audioURL)
+                Section("Sprachmemos") {
+                    ForEach(audioMemos.indices, id: \.self) { index in
+                        AudioMemoCard(memo: audioMemos[index]) {
+                            audioMemos.remove(at: index)
+                        }
+                    }
+                    
+                    AudioMemoRecorderView(audioMemos: $audioMemos)
                 }
             }
             .navigationTitle("Neuer Traumeintrag")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-//                ToolbarItem(placement: .cancellationAction) {
-//                    Button("Abbrechen") { dismiss() }
-//                }
-                
                 ToolbarItem(placement: .primaryAction) {
                     Button("Speichern") {
+                        // Auto-fill content from transcript if empty
+                        var finalContent = content
+                        if finalContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            if let transcript = audioMemos.first(where: { $0.transcript?.isEmpty == false })?.transcript {
+                                finalContent = transcript
+                                ToastManager.shared.showInfo("Beschreibung automatisch aus Transkript übernommen")
+                            }
+                        }
+                        
                         let newDream = DreamEntry(
                             date: .now,
-                            title: title.isEmpty ? "Ohne Titel" : title,
-                            content: content,
+                            title: title,
+                            content: finalContent,
                             mood: selectedMood,
                             tags: tags,
                             sleepQuality: sleepQuality,
-                            audioURL: audioURL,
+                            audioMemos: audioMemos,
                             sample: false
                         )
                         store.dreams.insert(newDream, at: 0)
+                        
+                        // LiveActivity aktualisieren
+                        activityManager.setStore(store)
+                        activityManager.updateActivityWithRealData()
+                        
+                        ToastManager.shared.showSuccess("Traum gespeichert", details: "\(audioMemos.count) Audio-Memos hinzugefügt • LiveActivity aktualisiert")
                         dismiss()
                     }
-                    .disabled(content.isEmpty)
+                    .disabled(!canSave)
                 }
             }
         }

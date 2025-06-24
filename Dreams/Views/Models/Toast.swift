@@ -66,6 +66,7 @@ enum ToastType: CaseIterable {
 }
 
 // MARK: - Toast Manager
+@MainActor
 class ToastManager: ObservableObject {
     @Published var toasts: [Toast] = []
     @Published var expandedToastId: UUID? {
@@ -90,13 +91,15 @@ class ToastManager: ObservableObject {
     func show(message: String, type: ToastType, details: String? = nil) {
         let toast = Toast(message: message, type: type, details: details)
         
-        withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-            toasts.insert(toast, at: 0) // Insert at beginning to make newest on top
-        }
-        
-        // Start timer for the new topmost toast (5 seconds for new toast)
-        if expandedToastId == nil {
-            startTimerForTopmostToast(duration: 5.0)
+        DispatchQueue.main.async {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                self.toasts.insert(toast, at: 0) // Insert at beginning to make newest on top
+            }
+            
+            // Start timer for the new topmost toast (5 seconds for new toast)
+            if self.expandedToastId == nil {
+                self.startTimerForTopmostToast(duration: 5.0)
+            }
         }
     }
     
@@ -149,7 +152,9 @@ class ToastManager: ObservableObject {
         // Start new timer for topmost toast
         currentTimerToastId = topmostToast.id
         currentTimer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { _ in
-            self.dismiss(topmostToast)
+            Task { @MainActor in
+                self.dismiss(topmostToast)
+            }
         }
     }
     
@@ -195,7 +200,9 @@ class ToastManager: ObservableObject {
         // Resume timer with remaining time
         currentTimerToastId = pausedInfo.toastId
         currentTimer = Timer.scheduledTimer(withTimeInterval: pausedInfo.remainingTime, repeats: false) { _ in
-            self.dismiss(toast)
+            Task { @MainActor in
+                self.dismiss(toast)
+            }
         }
         
         pausedTimerInfo = nil
