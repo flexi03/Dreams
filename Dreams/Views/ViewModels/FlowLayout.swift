@@ -50,37 +50,46 @@ private struct FlowLayoutHelper<Data: Collection, Content: View>: View where Dat
     @State private var width: CGFloat = 0
     
     var body: some View {
-        VStack(alignment: alignment, spacing: spacing) {
-            ForEach(computeRows(), id: \.self) { row in
-                HStack(spacing: spacing) {
-                    ForEach(row, id: \.self) {
-                        content($0)
+        GeometryReader { geometry in
+            VStack(alignment: alignment, spacing: spacing) {
+                ForEach(computeRows(availableWidth: geometry.size.width), id: \.self) { row in
+                    HStack(spacing: spacing) {
+                        ForEach(row, id: \.self) {
+                            content($0)
+                        }
+                        if alignment == .leading {
+                            Spacer(minLength: 0)
+                        }
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .top))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .readSize { size in
-            width = size.width
-        }
+        .frame(height: computeHeight())
     }
     
-    private func computeRows() -> [[Data.Element]] {
+    private func computeRows(availableWidth: CGFloat) -> [[Data.Element]] {
+        guard availableWidth > 0 else {
+            return [Array(data)]
+        }
+        
         var rows: [[Data.Element]] = []
         var currentRow: [Data.Element] = []
         var currentWidth: CGFloat = 0
         
         for element in data {
             let elementSize = sizeFor(element: element)
+            let spacingWidth = currentRow.isEmpty ? 0 : spacing
+            let neededWidth = currentWidth + spacingWidth + elementSize.width
             
-            if currentWidth + elementSize.width > width {
+            if neededWidth > availableWidth && !currentRow.isEmpty {
                 rows.append(currentRow)
-                currentRow = []
-                currentWidth = 0
+                currentRow = [element]
+                currentWidth = elementSize.width
+            } else {
+                currentRow.append(element)
+                currentWidth = neededWidth
             }
-            
-            currentRow.append(element)
-            currentWidth += elementSize.width + spacing
         }
         
         if !currentRow.isEmpty {
@@ -90,10 +99,25 @@ private struct FlowLayoutHelper<Data: Collection, Content: View>: View where Dat
         return rows
     }
     
+    private func computeHeight() -> CGFloat {
+        let rows = computeRows(availableWidth: UIScreen.main.bounds.width)
+        let rowHeight: CGFloat = 32 // Angenommene Höhe pro Zeile
+        let totalSpacing = spacing * CGFloat(max(0, rows.count - 1))
+        return CGFloat(rows.count) * rowHeight + totalSpacing
+    }
+    
     private func sizeFor(element: Data.Element) -> CGSize {
-        let controller = UIHostingController(rootView: content(element))
-        let size = controller.view.intrinsicContentSize
-        return CGSize(width: size.width, height: size.height)
+        // Vereinfachte Größenberechnung für bessere Performance
+        let text = String(describing: element)
+        let font = UIFont.systemFont(ofSize: 14) // Entspricht .subheadline
+        let attributes = [NSAttributedString.Key.font: font]
+        let textSize = (text as NSString).size(withAttributes: attributes)
+        
+        // Padding hinzufügen (horizontal: 12 + 12 = 24, vertical: 6 + 6 = 12)
+        return CGSize(
+            width: textSize.width + 24,
+            height: textSize.height + 12
+        )
     }
 }
 

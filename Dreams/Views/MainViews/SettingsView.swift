@@ -11,16 +11,41 @@ import ActivityKit
 struct SettingsView: View {
     @AppStorage("isFirstStart") var isFirstStart: Bool = true
     @AppStorage("liveActivityAutoStart") var liveActivityAutoStart: Bool = true
-    @AppStorage("debugModeEnabled") var debugModeEnabled: Bool = false
+    @AppStorage("isDebugMode") var isDebugMode: Bool = false
+    @AppStorage("dreamPassUserName") var dreamPassUserName: String = ""
     @EnvironmentObject private var store: DreamStoreSampleData
     @StateObject private var activityManager = DreamActivityManager()
     
     var body: some View {
         Form {
+            Section("Personalisierung") {
+                HStack {
+                    Text("Name")
+                    Spacer()
+                    TextField("Dein Name", text: $dreamPassUserName)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(.secondary)
+                }
+                
+                NavigationLink(destination: DreamPassView()) {
+                    HStack {
+                        Image(systemName: "creditcard")
+                            .foregroundColor(.purple)
+                        Text("Dream Pass")
+                        Spacer()
+                        if !dreamPassUserName.isEmpty {
+                            Text(dreamPassUserName)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+            
             Section("App-Einstellungen") {
-                Toggle("Debug-Modus", isOn: $debugModeEnabled)
-                    .onChange(of: debugModeEnabled) {
-                        ToastManager.shared.showInfo("Debug-Modus \(debugModeEnabled ? "aktiviert" : "deaktiviert")", details: debugModeEnabled ? "Erweiterte Funktionen verfügbar" : "Standard-Modus aktiv")
+                Toggle("Debug-Modus", isOn: $isDebugMode)
+                    .onChange(of: isDebugMode) {
+                        ToastManager.shared.showInfo("Debug-Modus \(isDebugMode ? "aktiviert" : "deaktiviert")", details: isDebugMode ? "Erweiterte Funktionen verfügbar • Debug-Toasts werden angezeigt" : "Standard-Modus aktiv • Debug-Toasts ausgeblendet")
                     }
                 
                 Button("LaunchScreen testen") {
@@ -85,14 +110,14 @@ struct SettingsView: View {
                     }
                 }
                 
-                NavigationLink(destination: DebugView()) {
+                NavigationLink(destination: LiveActivityDebugView()) {
                     HStack {
                         Image(systemName: "ladybug")
                         Text("LiveActivity Debug")
                     }
                 }
                 
-                if debugModeEnabled {
+                if isDebugMode {
                     NavigationLink(destination: AppDebugView()) {
                         HStack {
                             Image(systemName: "gearshape.2")
@@ -102,7 +127,7 @@ struct SettingsView: View {
                 }
             }
             
-            if debugModeEnabled {
+            if isDebugMode {
                 Section("App-Informationen") {
                     HStack {
                         Text("Gesamte Träume:")
@@ -235,4 +260,6 @@ struct AppDebugView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(DreamActivityManager())
+        .environmentObject(DreamStoreSampleData())
 }

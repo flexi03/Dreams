@@ -288,7 +288,6 @@ struct ToastTesterView: View {
 //            .padding()
             .navigationTitle("Toast Demo Tester")
 //        }
-//        .withToasts()
     }
 }
 

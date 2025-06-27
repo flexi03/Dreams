@@ -88,7 +88,17 @@ class ToastManager: ObservableObject {
     
     private init() {}
     
+    private var isDebugModeEnabled: Bool {
+        UserDefaults.standard.bool(forKey: "isDebugMode")
+    }
+    
     func show(message: String, type: ToastType, details: String? = nil) {
+        // Debug-Modus Check: Debug-Toasts werden nur im Debug-Modus angezeigt
+        // Info, Success, Error, Warning werden immer angezeigt (für User-Actions)
+        // Nur .debug wird gefiltert
+        if type == .debug && !isDebugModeEnabled {
+            return
+        }
         let toast = Toast(message: message, type: type, details: details)
         
         DispatchQueue.main.async {
@@ -231,6 +241,7 @@ extension ToastManager {
     func showDebug(_ message: String, details: String? = nil) {
         show(message: message, type: .debug, details: details)
     }
+    
 }
 
 // MARK: - Date Formatters

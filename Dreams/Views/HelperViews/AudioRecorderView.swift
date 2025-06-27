@@ -33,11 +33,11 @@ class AudioRecorder: ObservableObject {
             try session.setCategory(.playAndRecord, mode: .default)
             try session.setActive(true)
             Task { @MainActor in
-                ToastManager.shared.showInfo("Audio-Session konfiguriert")
+                ToastManager.shared.showDebug("Audio-Session konfiguriert")
             }
         } catch {
             Task { @MainActor in
-                ToastManager.shared.showError("Audio-Session Fehler", details: error.localizedDescription)
+                ToastManager.shared.showDebug("Audio-Session Fehler", details: error.localizedDescription)
             }
         }
     }
@@ -86,7 +86,7 @@ class AudioRecorder: ObservableObject {
         
         // Debug: Check file existence and print details
         let fileExists = FileManager.default.fileExists(atPath: url.path)
-        ToastManager.shared.showInfo("Audio Debug", details: "File exists: \(fileExists)\nPath: \(url.path)\nAbsolute: \(url.absoluteString)")
+        ToastManager.shared.showDebug("Audio Debug", details: "File exists: \(fileExists)\nPath: \(url.path)\nAbsolute: \(url.absoluteString)")
         
         guard fileExists else {
             ToastManager.shared.showError("Audio-Datei nicht gefunden", details: url.path)
@@ -102,7 +102,7 @@ class AudioRecorder: ObservableObject {
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
             isPlaying = true
-            ToastManager.shared.showSuccess("Wiedergabe gestartet", details: "Dauer: \(audioPlayer?.duration ?? 0)s")
+            ToastManager.shared.showDebug("Wiedergabe gestartet", details: "Dauer: \(audioPlayer?.duration ?? 0)s")
             
             // Check when playback finishes
             DispatchQueue.main.asyncAfter(deadline: .now() + (audioPlayer?.duration ?? 0)) {
@@ -118,14 +118,14 @@ class AudioRecorder: ObservableObject {
     func stopPlayback() {
         audioPlayer?.stop()
         isPlaying = false
-        ToastManager.shared.showInfo("Wiedergabe gestoppt")
+        ToastManager.shared.showDebug("Wiedergabe gestoppt")
     }
     
     func deleteRecording() {
         stopPlayback()
         if let url = audioURL {
             try? FileManager.default.removeItem(at: url)
-            ToastManager.shared.showWarning("Aufnahme gelöscht")
+            ToastManager.shared.showInfo("Aufnahme gelöscht")
         }
         audioURL = nil
         recordingTime = 0
@@ -171,7 +171,7 @@ class SpeechTranscriber {
     static func transcribe(url: URL, completion: @escaping (String?) -> Void) {
         guard SFSpeechRecognizer.authorizationStatus() == .authorized else {
             Task { @MainActor in
-                ToastManager.shared.showError("Spracherkennung nicht autorisiert")
+                ToastManager.shared.showWarning("Spracherkennung nicht autorisiert")
             }
             completion(nil)
             return
@@ -182,7 +182,7 @@ class SpeechTranscriber {
         request.shouldReportPartialResults = false
         
         Task { @MainActor in
-            ToastManager.shared.showInfo("Transkription gestartet...")
+            ToastManager.shared.showDebug("Transkription gestartet...")
         }
         
         recognizer?.recognitionTask(with: request) { result, error in
@@ -215,7 +215,7 @@ class SpeechTranscriber {
                     case .restricted:
                         ToastManager.shared.showWarning("Spracherkennung eingeschränkt")
                     case .notDetermined:
-                        ToastManager.shared.showInfo("Spracherkennung noch nicht bestimmt")
+                        ToastManager.shared.showDebug("Spracherkennung noch nicht bestimmt")
                     @unknown default:
                         ToastManager.shared.showWarning("Unbekannter Spracherkennung-Status")
                     }

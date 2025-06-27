@@ -29,7 +29,8 @@ struct MoodPicker: View {
                             .contentShape(Rectangle())
                             .background(
                                 Circle()
-                                    .fill(selectedMood == mood ? Color.purple.opacity(0.2) : Color.clear)
+                                    .fill(selectedMood == mood ? Color.purple.opacity(0.3) : Color.clear)
+                                    .animation(.easeInOut(duration: 0.2), value: selectedMood)
                             )
                     }
                     .buttonStyle(.plain)

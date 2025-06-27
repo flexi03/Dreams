@@ -178,7 +178,7 @@ class DreamActivityManager: ObservableObject {
 }
 
 // Enhanced Debug View
-struct DebugView: View {
+struct LiveActivityDebugView: View {
     @StateObject private var manager = DreamActivityManager()
     @EnvironmentObject private var store: DreamStoreSampleData
     
@@ -233,7 +233,7 @@ struct DebugView: View {
                     manager.restartActivity()
                 }) {
                     HStack {
-                        Image(systemName: "gobackward.circle.fill")
+                        Image(systemName: "arrow.counterclockwise.circle")
                         Text("Activity neustarten")
                         Spacer()
                     }

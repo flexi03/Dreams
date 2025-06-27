@@ -35,6 +35,9 @@ struct ContentView: View {
             
             NavigationStack {
                 StatsView()
+                    .navigationDestination(for: DreamEntry.self) { dream in
+                        DreamDetailView(dream: dream)
+                    }
             }
             .tabItem {
                 Label("Analysen", systemImage: "chart.bar")
@@ -55,6 +58,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(DreamActivityManager())
+            .environmentObject(DreamStoreSampleData())
             .withToasts()
             .preferredColorScheme(.dark)
     }
