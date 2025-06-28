@@ -10,7 +10,6 @@ import ActivityKit
 
 struct SettingsView: View {
     @AppStorage("isFirstStart") var isFirstStart: Bool = true
-    @AppStorage("liveActivityAutoStart") var liveActivityAutoStart: Bool = true
     @AppStorage("isDebugMode") var isDebugMode: Bool = false
     @AppStorage("dreamPassUserName") var dreamPassUserName: String = ""
     @EnvironmentObject private var store: DreamStoreSampleData
@@ -66,13 +65,12 @@ struct SettingsView: View {
                         .foregroundColor(activityManager.isActive ? .green : .red)
                 }
                 
-                Toggle("Auto-Start", isOn: $liveActivityAutoStart)
-                    .onChange(of: liveActivityAutoStart) {
-                        activityManager.autoStartEnabled = liveActivityAutoStart
-                        if liveActivityAutoStart && !activityManager.isActive {
+                Toggle("Auto-Start", isOn: $activityManager.autoStartEnabled)
+                    .onChange(of: activityManager.autoStartEnabled) {
+                        if activityManager.autoStartEnabled && !activityManager.isActive {
                             activityManager.startActivityWithRealData()
                         }
-                        ToastManager.shared.showInfo("LiveActivity Auto-Start \(liveActivityAutoStart ? "aktiviert" : "deaktiviert")", details: liveActivityAutoStart ? "Wird automatisch beim App-Start gestartet" : "Manueller Start erforderlich")
+                        ToastManager.shared.showInfo("LiveActivity Auto-Start \(activityManager.autoStartEnabled ? "aktiviert" : "deaktiviert")", details: activityManager.autoStartEnabled ? "Wird automatisch beim App-Start gestartet" : "Manueller Start erforderlich")
                     }
                 
                 HStack {
@@ -203,8 +201,8 @@ struct SettingsView: View {
         .navigationTitle("Einstellungen")
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
-            activityManager.setStore(store)
-            activityManager.autoStartEnabled = liveActivityAutoStart
+            // Store setzen ohne Auto-Start (vermeidet ungewollten Start in Settings)
+            activityManager.setStore(store, shouldAutoStart: false)
         }
     }
 }

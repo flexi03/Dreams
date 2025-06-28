@@ -12,7 +12,7 @@ import ActivityKit
 class DreamActivityManager: ObservableObject {
     @Published var isActive = false
     @Published var errorMessage = ""
-    @Published var autoStartEnabled = true
+    @AppStorage("liveActivityAutoStart") var autoStartEnabled: Bool = true
     @Published var dailyGoal = 3
     
     private var store: DreamStoreSampleData?
@@ -21,9 +21,12 @@ class DreamActivityManager: ObservableObject {
         checkExistingActivities()
     }
     
-    func setStore(_ store: DreamStoreSampleData) {
+    func setStore(_ store: DreamStoreSampleData, shouldAutoStart: Bool = true) {
+        let wasStoreNil = self.store == nil
         self.store = store
-        if autoStartEnabled && !isActive {
+        
+        // Nur beim ersten Setzen des Stores auto-starten
+        if shouldAutoStart && wasStoreNil && autoStartEnabled && !isActive {
             startActivityWithRealData()
         }
     }
@@ -335,7 +338,7 @@ struct LiveActivityDebugView: View {
         .navigationTitle("LiveActivity Debug")
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
-            manager.setStore(store)
+            manager.setStore(store, shouldAutoStart: false)
         }
     }
 }
