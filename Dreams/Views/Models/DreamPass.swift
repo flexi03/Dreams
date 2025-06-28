@@ -20,22 +20,29 @@ struct DreamPass: Identifiable, Codable {
     let passNumber: String
     let colorScheme: DreamPassColorScheme
     
-    init(name: String, dreams: [DreamEntry], existingPass: DreamPass? = nil) {
-        if let existing = existingPass {
-            // Verwende existierendes Design, aktualisiere nur Daten
-            self.id = existing.id
-            self.createdDate = existing.createdDate
-            self.passNumber = existing.passNumber
-            self.colorScheme = existing.colorScheme
-        } else {
-            // Erstelle neues Design
-            self.id = UUID()
-            self.createdDate = Date()
-            self.passNumber = Self.generatePassNumber()
-            self.colorScheme = DreamPassColorScheme.random()
-        }
+    init(name: String, dreams: [DreamEntry], forceNewDesign: Bool = false) {
+        // Erstelle immer neues Design oder wenn explizit gefordert
+        self.id = UUID()
+        self.createdDate = Date()
+        self.passNumber = Self.generatePassNumber()
+        self.colorScheme = DreamPassColorScheme.random()
         
         // Diese Werte werden immer aktualisiert
+        self.name = name
+        self.totalDreams = dreams.count
+        self.currentStreak = Self.calculateStreak(dreams: dreams)
+        self.favoriteTag = Self.findFavoriteTag(dreams: dreams)
+        self.dominantMood = Self.findDominantMood(dreams: dreams)
+    }
+    
+    init(existingDesign: DreamPass, name: String, dreams: [DreamEntry]) {
+        // Behalte das bestehende Design bei, aktualisiere nur Statistiken
+        self.id = existingDesign.id
+        self.createdDate = existingDesign.createdDate
+        self.passNumber = existingDesign.passNumber
+        self.colorScheme = existingDesign.colorScheme
+        
+        // Aktualisiere nur die dynamischen Daten
         self.name = name
         self.totalDreams = dreams.count
         self.currentStreak = Self.calculateStreak(dreams: dreams)

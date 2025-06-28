@@ -235,7 +235,19 @@ extension ToastManager {
     }
     
     func showInfo(_ message: String, details: String? = nil) {
-        show(message: message, type: .info, details: details)
+        // Automatisch LiveActivity-bezogene Info-Toasts als Debug-Toasts behandeln
+        let isLiveActivityRelated = message.localizedCaseInsensitiveContains("LiveActivity") || 
+                                   message.localizedCaseInsensitiveContains("Live Activity") ||
+                                   message.localizedCaseInsensitiveContains("Activity") ||
+                                   details?.localizedCaseInsensitiveContains("LiveActivity") == true ||
+                                   details?.localizedCaseInsensitiveContains("Live Activity") == true ||
+                                   details?.localizedCaseInsensitiveContains("Widget") == true
+        
+        if isLiveActivityRelated {
+            show(message: message, type: .debug, details: details)
+        } else {
+            show(message: message, type: .info, details: details)
+        }
     }
     
     func showDebug(_ message: String, details: String? = nil) {

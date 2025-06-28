@@ -31,6 +31,7 @@ struct QuoteOfTheDay: View {
                     Button(action: {
                         Task {
                             await quoteViewModel.loadRandomQuote(showToast: true)
+                            UserDefaults.standard.set(Date(), forKey: "lastQuoteDate")
                         }
                     }) {
                         Image(systemName: "arrow.clockwise.circle")
@@ -81,8 +82,9 @@ struct QuoteOfTheDay: View {
                 .shadow(color: .black.opacity(0.1), radius: 5)
         )
         .onAppear {
-            Task {
-                await quoteViewModel.loadRandomQuote()
+            // Nur beim ersten Aufruf oder wenn kein gespeichertes Zitat vorhanden ist
+            if quoteViewModel.currentQuote == nil {
+                quoteViewModel.loadSavedQuoteOrLoadNew()
             }
         }
         .padding(.horizontal)
@@ -279,6 +281,31 @@ class QuoteViewModel: ObservableObject {
     
     private let networkManager = NetworkManager.shared
     
+    func loadSavedQuoteOrLoadNew() {
+        // Check if this is first app start today
+        let lastQuoteDate = UserDefaults.standard.object(forKey: "lastQuoteDate") as? Date
+        let today = Calendar.current.startOfDay(for: Date())
+        let shouldLoadNewQuote = lastQuoteDate == nil || Calendar.current.startOfDay(for: lastQuoteDate!) < today
+        
+        if shouldLoadNewQuote {
+            // First start or new day - load new quote
+            Task {
+                await loadRandomQuote()
+                UserDefaults.standard.set(Date(), forKey: "lastQuoteDate")
+            }
+        } else {
+            // Load saved quote from same day
+            loadSavedQuote()
+            
+            // If no saved quote exists (shouldn't happen), load a new one
+            if currentQuote == nil {
+                Task {
+                    await loadRandomQuote()
+                }
+            }
+        }
+    }
+    
     func loadRandomQuote(language: String = "de", showToast: Bool = false) async {
         isLoading = true
         error = nil
@@ -310,7 +337,7 @@ class QuoteViewModel: ObservableObject {
     }
     
     // Gespeichertes Zitat aus UserDefaults laden
-    private func loadSavedQuote() {
+    func loadSavedQuote() {
         if let savedData = UserDefaults.standard.data(forKey: "savedQuote") {
             let decoder = JSONDecoder()
             if let quote = try? decoder.decode(Quote.self, from: savedData) {

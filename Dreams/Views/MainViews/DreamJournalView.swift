@@ -140,9 +140,6 @@ struct DreamJournalView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Suche in deinen Träumen")
-        .navigationDestination(for: DreamEntry.self) { dream in
-            DreamDetailView(dream: dream)
-        }
     }
 }
 

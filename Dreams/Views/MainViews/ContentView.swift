@@ -27,6 +27,9 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             NavigationStack {
                 DreamJournalView()
+                    .navigationDestination(for: DreamEntry.self) { dream in
+                        DreamDetailView(dream: dream)
+                    }
             }
             .tabItem {
                 Label("Traumtagebuch", systemImage: "book.closed")

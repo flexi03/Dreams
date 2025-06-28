@@ -22,23 +22,6 @@ struct StatsView: View {
         store.dreams.count
     }
     
-    private var averageSleepQuality: Double {
-        guard !store.dreams.isEmpty else { return 0 }
-        let sum = store.dreams.map { $0.sleepQuality }.reduce(0, +)
-        return Double(sum) / Double(store.dreams.count)
-    }
-    
-    private var mostCommonTags: [String] {
-        let allTags = store.dreams.flatMap { $0.tags }
-        let counts = Dictionary(grouping: allTags, by: { $0 }).mapValues { $0.count }
-        let sorted = counts.sorted { $0.value > $1.value }
-        return Array(sorted.prefix(3).map { $0.key })
-    }
-    
-    private var totalAudioMemos: Int {
-        store.dreams.flatMap { $0.audioMemos }.count
-    }
-    
     private var dreamStreak: Int {
         let sortedDreams = store.dreams.sorted { $0.date > $1.date }
         guard !sortedDreams.isEmpty else { return 0 }
@@ -87,6 +70,23 @@ struct StatsView: View {
         }.count
     }
     
+    private var averageSleepQuality: Double {
+        guard !store.dreams.isEmpty else { return 0 }
+        let sum = store.dreams.map { $0.sleepQuality }.reduce(0, +)
+        return Double(sum) / Double(store.dreams.count)
+    }
+    
+    private var mostCommonTags: [String] {
+        let allTags = store.dreams.flatMap { $0.tags }
+        let counts = Dictionary(grouping: allTags, by: { $0 }).mapValues { $0.count }
+        let sorted = counts.sorted { $0.value > $1.value }
+        return Array(sorted.prefix(3).map { $0.key })
+    }
+    
+    private var totalAudioMemos: Int {
+        store.dreams.flatMap { $0.audioMemos }.count
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -97,6 +97,14 @@ struct StatsView: View {
                             HStack {
                                 Text("Insights")
                                     .font(.title2.bold())
+                                Button(action: {
+                                    withAnimation { selectedStat = .insights }
+                                }) {
+                                    Image(systemName: "info.circle")
+                                        .font(.title3)
+                                        .foregroundColor(.secondary)
+                                }
+                                .buttonStyle(.plain)
                                 
                                 Spacer()
                                 
@@ -181,22 +189,22 @@ struct StatsView: View {
                             // Core Stats in 3x2 grid (6 most important stats)
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
                                 StatCard(title: "Träume", value: "\(totalDreams)", systemImage: "moon.stars.fill", color: .purple) {
-                                    withAnimation { selectedStat = .dreams }
+                                    withAnimation { selectedStat = .totalDreams }
                                 }
                                 StatCard(title: "Ø Qualität", value: String(format: "%.1f", averageSleepQuality), systemImage: "bed.double.fill", color: .indigo) {
-                                    withAnimation { selectedStat = .sleepQuality }
+                                    withAnimation { selectedStat = .averageSleepQuality }
                                 }
                                 StatCard(title: "Streak", value: "\(dreamStreak)", systemImage: "flame.fill", color: .red) {
-                                    withAnimation { selectedStat = .streak }
+                                    withAnimation { selectedStat = .dreamStreak }
                                 }
                                 StatCard(title: "Diese Woche", value: "\(Int(weeklyDreamFrequency))", systemImage: "calendar.badge.clock", color: .blue) {
-                                    withAnimation { selectedStat = .weekly }
+                                    withAnimation { selectedStat = .weeklyFrequency }
                                 }
                                 StatCard(title: "Audio Memos", value: "\(totalAudioMemos)", systemImage: "mic.fill", color: .orange) {
                                     withAnimation { selectedStat = .audioMemos }
                                 }
                                 StatCard(title: "Stimmung", value: mostCommonMood.rawValue, systemImage: "face.smiling", color: .yellow) {
-                                    withAnimation { selectedStat = .mood }
+                                    withAnimation { selectedStat = .moodDistribution }
                                 }
                             }
                             .padding(.horizontal)
@@ -406,6 +414,29 @@ private struct StatDetailSheet: View {
         }.count
     }
     
+    private var totalAudioMemos: Int {
+        store.dreams.flatMap { $0.audioMemos }.count
+    }
+    
+    private var averageSleepQuality: Double {
+        guard !store.dreams.isEmpty else { return 0 }
+        let sum = store.dreams.map { $0.sleepQuality }.reduce(0, +)
+        return Double(sum) / Double(store.dreams.count)
+    }
+    
+    private var mostCommonMood: Mood {
+        let moodCounts = Dictionary(grouping: store.dreams, by: { $0.mood })
+            .mapValues { $0.count }
+        return moodCounts.max(by: { $0.value < $1.value })?.key ?? .happy
+    }
+    
+    private var mostCommonTags: [String] {
+        let allTags = store.dreams.flatMap { $0.tags }
+        let counts = Dictionary(grouping: allTags, by: { $0 }).mapValues { $0.count }
+        let sorted = counts.sorted { $0.value > $1.value }
+        return Array(sorted.prefix(3).map { $0.key })
+    }
+    
     private func getDreamActivityInsight() -> String {
         if dreamStreak > 7 {
             return "Beeindruckend! Du dokumentierst deine Träume sehr konsequent. Diese Kontinuität kann deine Traumerinnerung stärken."
@@ -485,6 +516,18 @@ private struct StatDetailSheet: View {
             sleepQualityInsightView()
         case .lucidInsight:
             lucidInsightView()
+        case .totalDreams:
+            totalDreamsView()
+        case .averageSleepQuality:
+            averageSleepQualityView()
+        case .dreamStreak:
+            dreamStreakView()
+        case .weeklyFrequency:
+            weeklyFrequencyView()
+        case .audioMemos:
+            audioMemosView()
+        case .moodDistribution:
+            moodDistributionView()
         default:
             defaultView(for: stat)
         }
@@ -500,36 +543,53 @@ private struct StatDetailSheet: View {
                 Text("Was sind Insights?")
                     .font(.subheadline.bold())
                     .foregroundColor(.yellow)
-                Text("Insights sind intelligente Analysen deiner Traumdaten. Sie erkennen automatisch Muster, Trends und geben dir personalisierte Empfehlungen für besseren Schlaf und stärkere Traumerinnerung.")
+                Text("Insights sind intelligente Analysen deiner \(store.dreams.count) dokumentierten Träume. Sie erkennen automatisch Muster in deinem Schlafverhalten, analysieren deine Traumqualität und geben dir personalisierte Empfehlungen für bessere Traumerinnerung.")
                     .font(.body)
                     .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.yellow.opacity(0.1))
+                    .cornerRadius(8)
                 
                 Divider()
-                    .background(Color.yellow.opacity(0.3))
                 
                 Text("🎯 Wie funktionieren sie?")
                     .font(.subheadline.bold())
                     .foregroundColor(.blue)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("• Analysieren deine Traum-Häufigkeit und Kontinuität")
-                    Text("• Bewerten deine Schlafqualität über Zeit")
-                    Text("• Erkennen besondere Traumarten (wie luzide Träume)")
-                    Text("• Geben praktische Tipps zur Verbesserung")
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("• Analysieren deine \(dreamStreak)-Tage-Streak und Kontinuität")
+                    Text("• Bewerten deine durchschnittliche Schlafqualität (\(String(format: "%.1f", averageSleepQuality))⭐)")
+                    Text("• Erkennen besondere Traumarten (z.B. \(lucidDreamCount) luzide Träume)")
+                    Text("• Geben praktische Tipps basierend auf deinen echten Daten")
                 }
                 .font(.body)
                 .foregroundColor(.secondary)
                 
                 Divider()
-                    .background(Color.blue.opacity(0.3))
+                
+                Text("🧠 Deine Muster:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.purple)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("• Häufigste Stimmung: \(getMoodName(mostCommonMood)) (\(mostCommonMood.rawValue))")
+                    Text("• Audio-Memos aufgenommen: \(totalAudioMemos)")
+                    Text("• Diese Woche dokumentiert: \(Int(weeklyDreamFrequency)) Träume")
+                    if !mostCommonTags.isEmpty {
+                        Text("• Beliebte Tags: \(mostCommonTags.prefix(2).joined(separator: ", "))")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
                 
                 Text("📱 Interaktion")
                     .font(.subheadline.bold())
                     .foregroundColor(.green)
-                Text("Tippe auf jedes einzelne Insight für detaillierte Erklärungen und spezifische Empfehlungen zu diesem Bereich.")
-                    .font(.body)
+                Text("Tippe auf jedes einzelne Insight für detaillierte Erklärungen und spezifische Empfehlungen zu deinem persönlichen Traumverhalten.")
+                    .font(.caption)
                     .foregroundColor(.secondary)
             }
-            .padding(.vertical, 8)
         }
     }
     
@@ -692,6 +752,9 @@ private struct StatDetailSheet: View {
                     .font(.title2.bold())
             }
             
+            // Explanation
+            lucidDreamExplanation()
+            
             // Current Status
             lucidDreamStatus()
             
@@ -700,6 +763,36 @@ private struct StatDetailSheet: View {
             
             // Tips
             lucidDreamTips()
+        }
+    }
+    
+    private func lucidDreamExplanation() -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Was sind luzide Träume?")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            Text("Luzide Träume sind Träume, in denen du dir bewusst bist, dass du träumst. In diesem Zustand kannst du oft aktiv Einfluss auf den Traumverlauf nehmen und bewusste Entscheidungen treffen.")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(Color.purple.opacity(0.1))
+                .cornerRadius(8)
+            
+            VStack(alignment: .leading, spacing: 6) {
+                Text("🌟 Besonderheiten:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.blue)
+                Text("• Du erkennst während des Träumens, dass es ein Traum ist")
+                Text("• Du kannst bewusst handeln und Entscheidungen treffen")
+                Text("• Oft sehr lebendige und detailreiche Traumerfahrungen")
+                Text("• Möglichkeit, Ängste zu überwinden oder Fähigkeiten zu trainieren")
+            }
+            .font(.body)
+            .foregroundColor(.secondary)
+            
+            Divider()
         }
     }
     
@@ -778,6 +871,459 @@ private struct StatDetailSheet: View {
             }
             .font(.caption)
             .foregroundColor(.secondary)
+        }
+    }
+    
+    private func totalDreamsView() -> some View {
+        VStack(spacing: 16) {
+            Text("🌙 Deine Traumsammlung")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Deine Bilanz:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.purple)
+                Text("Du hast bereits \(store.dreams.count) Träume dokumentiert! Das ist eine beeindruckende Sammlung deiner nächtlichen Abenteuer.")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.purple.opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("📊 Einordnung:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.blue)
+                    if store.dreams.count == 0 {
+                        Text("• Zeit für deinen ersten Traum! 🚀")
+                    } else if store.dreams.count < 5 {
+                        Text("• Du stehst noch am Anfang deiner Traumreise")
+                        Text("• Jeder neue Traum bringt dich weiter")
+                    } else if store.dreams.count < 20 {
+                        Text("• Du entwickelst eine schöne Routine")
+                        Text("• Deine Traumerinnerung wird immer stärker")
+                    } else if store.dreams.count < 50 {
+                        Text("• Du bist ein echter Traumsammler geworden!")
+                        Text("• Deine Sammlung zeigt schöne Muster")
+                    } else {
+                        Text("• Wow! Du bist ein wahrer Traummeister 🏆")
+                        Text("• Deine Sammlung ist beeindruckend umfangreich")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("🎯 Motivation:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    if store.dreams.count < 10 {
+                        Text("• Versuche eine Woche lang jeden Tag zu dokumentieren")
+                        Text("• Schon 10 Träume zeigen erste Muster")
+                    } else if store.dreams.count < 30 {
+                        Text("• Du könntest bald deine persönlichen Traumthemen entdecken")
+                        Text("• 30 Träume sind ein toller Meilenstein!")
+                    } else {
+                        Text("• Du hast genug Daten für tiefe Einblicke")
+                        Text("• Achte auf wiederkehrende Symbole und Themen")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    private func averageSleepQualityView() -> some View {
+        VStack(spacing: 16) {
+            Text("😴 Deine Schlafqualität")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Dein Durchschnitt:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.indigo)
+                
+                let avgQuality = store.dreams.isEmpty ? 0 : Double(store.dreams.map { $0.sleepQuality }.reduce(0, +)) / Double(store.dreams.count)
+                Text("Mit \(String(format: "%.1f", avgQuality)) von 5 Sternen zeigst du \(getQualityDescription(avgQuality))!")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.indigo.opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("📈 Details:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.blue)
+                    
+                    let excellentNights = store.dreams.filter { $0.sleepQuality >= 5 }.count
+                    let goodNights = store.dreams.filter { $0.sleepQuality >= 4 }.count
+                    let okayNights = store.dreams.filter { $0.sleepQuality >= 3 }.count
+                    
+                    Text("• Perfekte Nächte (5⭐): \(excellentNights)")
+                    Text("• Sehr gute Nächte (4⭐+): \(goodNights)")
+                    Text("• Okay Nächte (3⭐+): \(okayNights)")
+                    
+                    if store.dreams.count > 0 {
+                        let excellentPercent = Int((Double(excellentNights) / Double(store.dreams.count)) * 100)
+                        Text("• \(excellentPercent)% deiner Nächte waren perfekt!")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("💡 Verbesserung:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    if avgQuality < 3 {
+                        Text("• Versuche eine entspannende Abendroutine")
+                        Text("• Achte auf regelmäßige Schlafzeiten")
+                        Text("• Reduziere Bildschirmzeit vor dem Schlafen")
+                    } else if avgQuality < 4 {
+                        Text("• Du schläfst schon gut - kleine Optimierungen helfen")
+                        Text("• Experimentiere mit der Raumtemperatur")
+                        Text("• Achte auf deine Ernährung am Abend")
+                    } else {
+                        Text("• Du schläfst fantastisch! 🎉")
+                        Text("• Behalte deine erfolgreichen Gewohnheiten bei")
+                        Text("• Du könntest anderen Tipps geben")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    private func dreamStreakView() -> some View {
+        VStack(spacing: 16) {
+            Text("🔥 Deine Traum-Streak")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Aktuelle Serie:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.red)
+                Text("Du dokumentierst seit \(dreamStreak) Tag\(dreamStreak == 1 ? "" : "en") deine Träume! \(getStreakMotivation())")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("🏆 Streak-Level:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.orange)
+                    if dreamStreak == 0 {
+                        Text("• Bereit für den Start! 🚀")
+                        Text("• Schon morgen früh kannst du beginnen")
+                    } else if dreamStreak < 3 {
+                        Text("• 🌱 Anfänger - Du fängst gerade an")
+                        Text("• Jeder Tag zählt!")
+                    } else if dreamStreak < 7 {
+                        Text("• 🌿 Fortgeschritten - Du bist auf einem guten Weg")
+                        Text("• Eine Woche ist das erste große Ziel")
+                    } else if dreamStreak < 14 {
+                        Text("• 🌳 Erfahren - Du hast eine tolle Routine entwickelt")
+                        Text("• Zwei Wochen sind beeindruckend!")
+                    } else if dreamStreak < 30 {
+                        Text("• 🎯 Profi - Du beherrschst die Traumerinnerung")
+                        Text("• Ein Monat ist ein fantastischer Meilenstein")
+                    } else {
+                        Text("• 👑 Meister - Du bist unglaublich konsequent!")
+                        Text("• Deine Disziplin ist vorbildlich")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("🎯 Nächstes Ziel:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    if dreamStreak < 7 {
+                        Text("• Erreiche eine Woche (\(7 - dreamStreak) Tage noch)")
+                        Text("• Lege das Handy direkt neben dein Bett")
+                    } else if dreamStreak < 14 {
+                        Text("• Schaffe zwei Wochen (\(14 - dreamStreak) Tage noch)")
+                        Text("• Du bildest gerade eine starke Gewohnheit")
+                    } else if dreamStreak < 30 {
+                        Text("• Erreiche einen ganzen Monat!")
+                        Text("• Du bist schon sehr nah dran")
+                    } else {
+                        Text("• Du könntest auf 50 oder sogar 100 Tage gehen!")
+                        Text("• Du bist bereits ein Vorbild für andere")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    private func weeklyFrequencyView() -> some View {
+        VStack(spacing: 16) {
+            Text("📅 Diese Woche")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Deine Wochenbilanz:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.blue)
+                Text("In den letzten 7 Tagen hast du \(Int(weeklyDreamFrequency)) Träume dokumentiert. \(getWeeklyMotivation())")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("📊 Wochenrhythmus:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.purple)
+                    
+                    let weeklyRate = weeklyDreamFrequency / 7.0 * 100
+                    Text("• Tägliche Rate: \(String(format: "%.0f", weeklyRate))%")
+                    
+                    if weeklyDreamFrequency == 0 {
+                        Text("• Diese Woche war ruhig - das ist normal!")
+                        Text("• Manchmal braucht unser Geist eine Pause")
+                    } else if weeklyDreamFrequency < 3 {
+                        Text("• Ein entspanntes Tempo")
+                        Text("• Qualität ist wichtiger als Quantität")
+                    } else if weeklyDreamFrequency < 5 {
+                        Text("• Eine ausgewogene Woche")
+                        Text("• Du findest einen guten Rhythmus")
+                    } else if weeklyDreamFrequency == 7 {
+                        Text("• Perfekte Woche! Jeden Tag dokumentiert! 🎉")
+                        Text("• Das ist außergewöhnlich konsequent")
+                    } else {
+                        Text("• Sehr aktive Traumwoche!")
+                        Text("• Du erinnerst dich an sehr viele Details")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("🚀 Für nächste Woche:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    if weeklyDreamFrequency < 3 {
+                        Text("• Versuche 4-5 Träume zu dokumentieren")
+                        Text("• Stelle dir einen sanften Wecker für morgens")
+                    } else if weeklyDreamFrequency < 7 {
+                        Text("• Du könntest eine perfekte Woche schaffen!")
+                        Text("• Versuche auch an Wochenenden zu dokumentieren")
+                    } else {
+                        Text("• Halte dein fantastisches Tempo!")
+                        Text("• Du könntest anderen zeigen, wie es geht")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    private func audioMemosView() -> some View {
+        VStack(spacing: 16) {
+            Text("🎤 Deine Audio-Memos")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Deine Sprachnotizen:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.orange)
+                Text("Du hast \(totalAudioMemos) Audio-Memos aufgenommen! \(getAudioMemoDescription())")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color.orange.opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("🎯 Nutzen von Audio-Memos:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.purple)
+                    Text("• Schneller als Tippen direkt nach dem Aufwachen")
+                    Text("• Erfassen auch Emotionen und Stimmungen")
+                    Text("• Können später transkribiert werden")
+                    Text("• Ideal für komplexe oder lange Träume")
+                    if totalAudioMemos > 0 {
+                        let averagePerDream = Double(totalAudioMemos) / Double(max(store.dreams.count, 1))
+                        Text("• Du nutzt durchschnittlich \(String(format: "%.1f", averagePerDream)) Memos pro Traum")
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("💡 Tipp:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    if totalAudioMemos == 0 {
+                        Text("• Probiere Audio-Memos für deinen nächsten Traum!")
+                        Text("• Besonders hilfreich direkt nach dem Aufwachen")
+                        Text("• Du kannst sprechen ohne die Augen zu öffnen")
+                    } else if totalAudioMemos < 5 {
+                        Text("• Audio-Memos werden mit der Zeit natürlicher")
+                        Text("• Sprich einfach drauf los - Details kommen später")
+                    } else {
+                        Text("• Du nutzt Audio-Memos bereits sehr gut!")
+                        Text("• Achte auf die automatische Transkription")
+                        Text("• Memos können auch Stimmungen erfassen")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    private func moodDistributionView() -> some View {
+        VStack(spacing: 16) {
+            Text("😊 Deine Traumstimmungen")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Deine häufigste Stimmung:")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.yellow)
+                Text("Deine Träume sind am häufigsten \(getMoodName(mostCommonMood).lowercased()) (\(mostCommonMood.rawValue)). \(getMoodInsight())")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(getMoodColor(mostCommonMood).opacity(0.1))
+                    .cornerRadius(8)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("🎨 Stimmungsverteilung:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.blue)
+                    
+                    let moodCounts = Dictionary(grouping: store.dreams, by: { $0.mood }).mapValues { $0.count }
+                    ForEach(Mood.allCases, id: \.self) { mood in
+                        let count = moodCounts[mood] ?? 0
+                        if count > 0 {
+                            let percentage = store.dreams.count > 0 ? Int((Double(count) / Double(store.dreams.count)) * 100) : 0
+                            Text("• \(getMoodName(mood)): \(count)x (\(percentage)%)")
+                        }
+                    }
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("🧠 Bedeutung:")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.green)
+                    switch mostCommonMood {
+                    case .happy:
+                        Text("• Fröhliche Träume deuten auf positives Wohlbefinden hin")
+                        Text("• Du verarbeitest wahrscheinlich schöne Erlebnisse")
+                    case .cosmic:
+                        Text("• Kosmische Träume zeigen spirituelle Verbindung")
+                        Text("• Du denkst gerne über große Zusammenhänge nach")
+                    case .spiritual:
+                        Text("• Spirituelle Träume deuten auf innere Suche hin")
+                        Text("• Du beschäftigst dich mit tieferen Lebensfragen")
+                    case .sad:
+                        Text("• Traurige Träume helfen bei der Verarbeitung")
+                        Text("• Das ist ein natürlicher Teil des Heilungsprozesses")
+                    case .angry:
+                        Text("• Wütende Träume verarbeiten oft Frustration")
+                        Text("• Träume helfen beim Abbau von Anspannung")
+                    case .nightmare:
+                        Text("• Albträume verarbeiten oft Ängste und Stress")
+                        Text("• Häufige Albträume sollten beachtet werden")
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    // Helper functions for the new views
+    private func getQualityDescription(_ quality: Double) -> String {
+        if quality >= 4.5 { return "exzellenten Schlaf" }
+        else if quality >= 3.5 { return "guten Schlaf" }
+        else if quality >= 2.5 { return "okay Schlaf" }
+        else { return "Verbesserungspotential" }
+    }
+    
+    private func getStreakMotivation() -> String {
+        if dreamStreak == 0 { return "Zeit für einen Neustart! 🚀" }
+        else if dreamStreak == 1 { return "Ein großartiger Anfang! 🌱" }
+        else if dreamStreak < 7 { return "Du baust eine tolle Gewohnheit auf! 💪" }
+        else if dreamStreak < 14 { return "Beeindruckende Konstanz! 🔥" }
+        else if dreamStreak < 30 { return "Du bist ein wahrer Traumdokumentations-Profi! 🏆" }
+        else { return "Unglaublich! Du bist ein Meister der Konstanz! 👑" }
+    }
+    
+    private func getWeeklyMotivation() -> String {
+        if weeklyDreamFrequency == 0 { return "Manchmal braucht die Seele eine Pause - das ist völlig normal." }
+        else if weeklyDreamFrequency < 3 { return "Ein entspanntes Tempo, das ist völlig in Ordnung." }
+        else if weeklyDreamFrequency < 5 { return "Eine schöne Balance aus Dokumentation und Entspannung." }
+        else if weeklyDreamFrequency == 7 { return "Wahnsinn! Jeden Tag dokumentiert - du bist unglaublich!" }
+        else { return "So eine aktive Traumwoche ist beeindruckend!" }
+    }
+    
+    private func getAudioMemoDescription() -> String {
+        if totalAudioMemos == 0 { return "Audio-Memos sind ein großartiges Tool, das du noch entdecken kannst." }
+        else if totalAudioMemos < 5 { return "Du probierst Audio-Memos aus - ein cleverer Ansatz!" }
+        else if totalAudioMemos < 15 { return "Du nutzt Audio-Memos regelmäßig - sehr praktisch!" }
+        else { return "Du bist ein Audio-Memo-Experte! Sehr effizient." }
+    }
+    
+    private func getMoodInsight() -> String {
+        switch mostCommonMood {
+        case .happy: return "Das zeigt eine positive Grundstimmung in deinem Leben."
+        case .cosmic: return "Du hast eine tiefe Verbindung zum Universum und großen Fragen."
+        case .spiritual: return "Deine Träume spiegeln eine spirituelle Reise wider."
+        case .sad: return "Deine Träume helfen dir beim Verarbeiten von Emotionen."
+        case .angry: return "Träume sind ein sicherer Ort, um Frustrationen zu verarbeiten."
+        case .nightmare: return "Albträume können Stress oder Ängste widerspiegeln - das ist normal."
         }
     }
     

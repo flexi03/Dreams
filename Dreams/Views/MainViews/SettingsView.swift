@@ -127,6 +127,50 @@ struct SettingsView: View {
                 }
             }
             
+            Section("App-Version") {
+                HStack {
+                    Text("Version:")
+                    Spacer()
+                    Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unbekannt")
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Build:")
+                    Spacer()
+                    Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unbekannt")
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Bundle ID:")
+                    Spacer()
+                    Text(Bundle.main.bundleIdentifier ?? "Unbekannt")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                }
+                
+                HStack {
+                    Text("iOS Version:")
+                    Spacer()
+                    Text(UIDevice.current.systemVersion)
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Gerät:")
+                    Spacer()
+                    Text(UIDevice.current.model)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
             if isDebugMode {
                 Section("App-Informationen") {
                     HStack {
@@ -157,6 +201,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Einstellungen")
+        .toolbar(.hidden, for: .tabBar)
         .onAppear {
             activityManager.setStore(store)
             activityManager.autoStartEnabled = liveActivityAutoStart
@@ -188,26 +233,28 @@ struct AppDebugView: View {
                 }
             }
             
-            Section("System-Informationen") {
+            Section("Erweiterte System-Informationen") {
                 HStack {
-                    Text("iOS Version:")
+                    Text("Prozessor:")
                     Spacer()
-                    Text(UIDevice.current.systemVersion)
+                    Text(ProcessInfo.processInfo.processorCount > 1 ? "\(ProcessInfo.processInfo.processorCount) Kerne" : "1 Kern")
                         .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
                 }
                 
                 HStack {
-                    Text("Device Model:")
+                    Text("Speicher:")
                     Spacer()
-                    Text(UIDevice.current.model)
+                    Text(ByteCountFormatter.string(fromByteCount: Int64(ProcessInfo.processInfo.physicalMemory), countStyle: .memory))
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Systemname:")
+                    Spacer()
+                    Text(UIDevice.current.systemName)
                         .font(.caption)
-                }
-                
-                HStack {
-                    Text("Bundle ID:")
-                    Spacer()
-                    Text(Bundle.main.bundleIdentifier ?? "Unknown")
-                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
             }
@@ -228,6 +275,7 @@ struct AppDebugView: View {
             }
         }
         .navigationTitle("App Debug")
+        .toolbar(.hidden, for: .tabBar)
         .alert("Alle Daten löschen?", isPresented: $showingClearAlert) {
             Button("Löschen", role: .destructive) {
                 store.dreams.removeAll()

@@ -74,7 +74,7 @@ class DreamActivityManager: ObservableObject {
             print("✅ Live Activity gestartet: \(activity.id)")
             isActive = true
             errorMessage = ""
-            ToastManager.shared.showSuccess("LiveActivity gestartet", details: "Streak: \(streak) | Heute: \(todayCount)/\(dailyGoal)")
+            ToastManager.shared.showInfo("LiveActivity gestartet", details: "Streak: \(streak) | Heute: \(todayCount)/\(dailyGoal)")
         } catch {
             print("❌ Fehler beim Starten: \(error)")
             errorMessage = "Fehler: \(error.localizedDescription)"
@@ -333,6 +333,7 @@ struct LiveActivityDebugView: View {
             }
         }
         .navigationTitle("LiveActivity Debug")
+        .toolbar(.hidden, for: .tabBar)
         .onAppear {
             manager.setStore(store)
         }
