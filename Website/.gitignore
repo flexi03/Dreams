@@ -1,0 +1,26 @@
+# Website Deployment Files
+.DS_Store
+Thumbs.db
+
+# Development
+*.log
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*.tmp
+*~
+
+# Screenshots (add manually)
+# Uncomment when screenshots are added:
+# !assets/images/screenshot*.jpg
+# !assets/images/screenshot*.png
+
+# Compressed versions
+*.zip
+*.tar.gz
+
+# Local development
+node_modules/
+.env
