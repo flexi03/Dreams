@@ -754,7 +754,8 @@ function initializeCodeCarousel() {
         });
     }
     
-    // Swipe-Funktionalität entfernt - nur Buttons für Navigation
+    // Touch/Swipe functionality for mobile
+    setupSwipeGestures(codeStack);
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -884,5 +885,150 @@ function startCodeAutoRotate() {
 
 function stopCodeAutoRotate() {
     clearInterval(codeAutoRotateInterval);
+}
+
+// Apple-like swipe functionality for code carousel
+function setupSwipeGestures(element) {
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let animationLock = false;
+    let currentCard = null;
+    
+    // Touch events for mobile
+    element.addEventListener('touchstart', handleStart, { passive: false });
+    element.addEventListener('touchmove', handleMove, { passive: false });
+    element.addEventListener('touchend', handleEnd, { passive: false });
+    
+    // Mouse events for desktop
+    element.addEventListener('mousedown', handleStart);
+    element.addEventListener('mousemove', handleMove);
+    element.addEventListener('mouseup', handleEnd);
+    element.addEventListener('mouseleave', handleEnd);
+    
+    function handleStart(e) {
+        if (animationLock || codeCarouselIsAnimating) return;
+        
+        e.preventDefault();
+        const point = e.touches ? e.touches[0] : e;
+        startX = point.clientX;
+        startY = point.clientY;
+        isDragging = true;
+        
+        // Get the front card
+        currentCard = document.querySelector('.code-window:nth-child(' + (currentCodeIndex + 1) + ')');
+        if (currentCard) {
+            currentCard.style.transition = 'none';
+            currentCard.style.zIndex = '15'; // Bring to front
+        }
+        
+        // Stop auto rotation while swiping
+        stopCodeAutoRotate();
+    }
+    
+    function handleMove(e) {
+        if (!isDragging || !currentCard || animationLock) return;
+        
+        e.preventDefault();
+        const point = e.touches ? e.touches[0] : e;
+        const deltaX = point.clientX - startX;
+        const deltaY = point.clientY - startY;
+        
+        // Only handle horizontal swipes (ignore if too much vertical movement)
+        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) return;
+        
+        // Calculate progress (-1 to 1)
+        const maxDistance = 150;
+        const progress = Math.max(-1, Math.min(1, deltaX / maxDistance));
+        
+        // Apple-like smooth animations
+        applySwipeTransform(currentCard, progress);
+    }
+    
+    function handleEnd(e) {
+        if (!isDragging || !currentCard) return;
+        
+        isDragging = false;
+        const point = e.changedTouches ? e.changedTouches[0] : e;
+        const deltaX = point.clientX - startX;
+        const threshold = 50;
+        
+        // Determine swipe direction and trigger navigation
+        if (Math.abs(deltaX) > threshold) {
+            animationLock = true;
+            
+            if (deltaX > 0) {
+                // Right swipe - go to previous
+                swipeCard(currentCard, 'right', () => {
+                    showCodeCarousel(currentCodeIndex - 1);
+                    resetCardState();
+                });
+            } else {
+                // Left swipe - go to next
+                swipeCard(currentCard, 'left', () => {
+                    showCodeCarousel(currentCodeIndex + 1);
+                    resetCardState();
+                });
+            }
+        } else {
+            // Snap back to original position
+            snapBack(currentCard, () => {
+                resetCardState();
+            });
+        }
+    }
+    
+    function applySwipeTransform(card, progress) {
+        const absProgress = Math.abs(progress);
+        const direction = progress > 0 ? 1 : -1; // 1 for right, -1 for left
+        
+        // Apple-like smooth easing
+        const easedProgress = absProgress * absProgress * (3 - 2 * absProgress);
+        
+        // Multi-layered transform for depth and realism
+        const translateX = direction * easedProgress * 80;
+        const translateY = easedProgress * 30;
+        const translateZ = -easedProgress * 60;
+        const rotateY = direction * easedProgress * 15;
+        const rotateX = easedProgress * 3;
+        const scale = 1 - easedProgress * 0.15;
+        const opacity = 1 - easedProgress * 0.4;
+        
+        card.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(${scale})`;
+        card.style.opacity = opacity;
+    }
+    
+    function swipeCard(card, direction, callback) {
+        const multiplier = direction === 'left' ? -1 : 1;
+        
+        // Both directions move backwards with Apple-like spring animation
+        card.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        card.style.transform = `translateX(${multiplier * 120}px) translateY(50px) translateZ(-100px) rotateY(${multiplier * 25}deg) rotateX(8deg) scale(0.7)`;
+        card.style.opacity = '0';
+        
+        setTimeout(callback, 300);
+    }
+    
+    function snapBack(card, callback) {
+        card.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        card.style.transform = 'translateX(0) translateY(0) translateZ(0) rotateY(0) rotateX(0) scale(1)';
+        card.style.opacity = '1';
+        
+        setTimeout(callback, 400);
+    }
+    
+    function resetCardState() {
+        if (currentCard) {
+            currentCard.style.transition = '';
+            currentCard.style.transform = '';
+            currentCard.style.opacity = '';
+            currentCard.style.zIndex = '';
+            currentCard = null;
+        }
+        animationLock = false;
+        
+        // Restart auto rotation
+        setTimeout(startCodeAutoRotate, 500);
+    }
 }
 
