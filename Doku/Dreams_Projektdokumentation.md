@@ -226,6 +226,18 @@ TabView (Haupt-Navigation)
 **Problem**: Verschiedene Toast-Typen und Debug-Filterung
 **Lösung**: Intelligente Keyword-basierte Filterung
 
+### 5. Website Responsive Design Herausforderungen
+**Problem**: Buttons erschienen auf verschiedenen Geräten inkonsistent
+**Lösung**: Inline-Flexbox mit strategischen `!important` CSS-Regeln
+
+### 6. Mobile Navigation UX
+**Problem**: Standard Burger-Menü war funktional und visuell mangelhaft
+**Lösung**: Custom Mobile Overlay mit perfekt zentriertem X-Button und glasigem Design
+
+### 7. Cross-Device Feature-Card Layout
+**Problem**: Suboptimale Platznutzung auf verschiedenen Bildschirmgrößen
+**Lösung**: Adaptive CSS Grid mit geräte-spezifischen Breakpoints
+
 ---
 
 ## 🎯 Innovative Features
@@ -273,6 +285,115 @@ TabView (Haupt-Navigation)
 
 ---
 
+## 🌐 Website-Entwicklung & Marketing
+
+### Landing Page Konzept
+Im Zuge des Projekts wurde eine dedizierte **Landing Page** entwickelt (https://dreams.cinematicfelix.de), die als primäre Marketing- und Informationsplattform für die App dient.
+
+### Technische Umsetzung
+```html
+<!-- Tech Stack der Website -->
+- Vanilla HTML5/CSS3/JavaScript
+- Responsive Design für alle Geräte
+- Moderne CSS Grid & Flexbox Layouts
+- Apple-inspirierte Animationen
+- Touch/Swipe Gestures für mobile Geräte
+```
+
+### Design-Philosophie Website
+Die Website spiegelt das **Glassy Design** der App wider:
+- **Konsistente Farbpalette**: Lila/Purple als Hauptakzent
+- **Glasige UI-Elemente**: Backdrop-Filter und Transparenzen
+- **Responsive Breakpoints**: Optimiert für Desktop, iPad, Mobile
+- **Apple-like Interactions**: Smooth Hover-Effekte und Animationen
+
+### Responsive Design Challenges
+Das Website-Projekt brachte umfangreiche **Responsive Design Herausforderungen** mit sich:
+
+#### 1. Button-Layout Konsistenz
+**Problem**: GitHub/Doku Buttons erschienen auf verschiedenen Geräten vertikal gestapelt
+**Lösung**: Inline-Flexbox mit `!important` Regeln für zuverlässige Side-by-Side Darstellung
+
+#### 2. Mobile Navigation
+**Problem**: Standard Burger-Menü war schlecht sichtbar und funktional mangelhaft
+**Lösung**: 
+- Vollständiges mobile Overlay mit Dark-Theme Design
+- Perfekt zentriertes X-Button mit präzisen CSS Transforms
+- Glasige UI-Elemente mit lila Akzenten
+- Alle Website-Sektionen im mobilen Menü
+
+#### 3. Feature-Karten Responsiveness
+**Problem**: Suboptimale Platznutzung auf verschiedenen Bildschirmgrößen
+**Lösung**: Adaptive Grid-Layouts:
+- **Desktop/iPad Querformat** (900px+): 3 Karten pro Reihe
+- **iPad Hochformat** (768px): 2 Karten pro Reihe
+- **Mobile** (480px): 1 Karte pro Reihe mit kompakterem Design
+
+#### 4. Code Carousel Touch-Funktionalität
+**Problem**: Fehlende Touch/Swipe Unterstützung für mobile Geräte
+**Lösung**: Apple-inspirierte Swipe-Gesten mit Multi-Touch Support und Spring-Animationen
+
+### CSS-Architektur
+```css
+/* Moderne CSS-Patterns */
+:root {
+    --primary: #8b5cf6;         /* Dreams Purple */
+    --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    --transition-normal: 0.3s ease;
+    --radius-lg: 1.5rem;        /* Glassy Design */
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 900px) { /* iPad Querformat+ */ }
+@media (max-width: 768px) { /* iPad Hochformat */ }
+@media (max-width: 480px) { /* Mobile */ }
+```
+
+### JavaScript Interaktions-Features
+- **Touch/Swipe Gestures**: Apple-like Smooth Animations
+- **Burger Menu Logic**: State-Management mit CSS Classes
+- **Responsive Image Handling**: Adaptive Content-Loading
+- **Smooth Scrolling**: Section-Navigation mit Offset-Berechnung
+
+### SEO & Meta-Optimierung
+```html
+<!-- OpenGraph für Social Media -->
+<meta property="og:title" content="Dreams - Traumtagebuch App">
+<meta property="og:description" content="Die moderne iOS App für deine Träume">
+<meta property="og:image" content="app-icon.png">
+
+<!-- Twitter Cards -->
+<meta property="twitter:card" content="summary_large_image">
+```
+
+### Performance-Optimierungen
+- **CSS Minification**: Optimierte Ladezeiten
+- **Image Optimization**: WebP/PNG Hybrid-Ansatz  
+- **Lazy Loading**: Conditional Content-Loading
+- **Cache Strategies**: Browser-Caching für statische Assets
+
+### Accessibility Features
+- **Semantic HTML**: Proper heading hierarchy
+- **ARIA Labels**: Screen-reader Unterstützung
+- **Keyboard Navigation**: Tab-Index Optimierung
+- **Color Contrast**: WCAG 2.1 AA Compliance
+
+### Integration mit App-Ecosystem
+Die Website dient als **zentraler Hub** für:
+1. **TestFlight Beta Downloads**: Direkte Links zur App
+2. **GitHub Repository**: Open-Source Code-Zugriff
+3. **Projekt-Dokumentation**: Diese Doku als PDF/Markdown
+4. **Feature-Demonstration**: Interaktive Showcases
+5. **Community Building**: Beta-Tester Akquisition
+
+### Marketing-Impact
+- **Professional Presence**: Erhöht Glaubwürdigkeit der App
+- **SEO Benefits**: Auffindbarkeit in Suchmaschinen
+- **Showcase Platform**: Portfolio-Integration für Entwickler
+- **Beta-Tester Akquisition**: Streamlined Onboarding-Prozess
+
+---
+
 ## 🔮 Ausblick & Roadmap
 
 ### Geplante Features
@@ -302,11 +423,30 @@ TabView (Haupt-Navigation)
 
 ## 🏆 Fazit
 
-Dreams repräsentiert eine erfolgreiche Verbindung von **akademischem Projekt** und **professioneller App-Entwicklung**. Die App demonstriert moderne iOS-Entwicklung mit cutting-edge Technologies und innovativen UX-Ansätzen.
+Dreams repräsentiert eine erfolgreiche Verbindung von **akademischem Projekt** und **professioneller App-Entwicklung**. Das Projekt umfasst nicht nur die iOS-App selbst, sondern auch eine vollständige **digitale Präsenz** mit moderner Website und umfassendem Marketing-Ecosystem.
 
-Das Projekt zeigt, wie eine klare Vision (Traumdokumentation) durch iterative Entwicklung und technologische Innovation zu einem einzigartigen Produkt werden kann, das sowohl funktional als auch ästhetisch überzeugt.
+### Technische Errungenschaften
+- **iOS-App**: Cutting-edge SwiftUI mit iOS 26 Glassy Design
+- **Website**: Responsive Design mit Apple-inspirierten Interaktionen
+- **Cross-Platform Konsistenz**: Einheitliche Design-Sprache über alle Plattformen
+- **Open-Source Ansatz**: Transparente Entwicklung mit Community-Feedback
 
-**Dreams ist mehr als eine App - es ist ein Fenster in die Welt unserer nächtlichen Gedanken.** 🌙✨
+### Lerneffekte & Kompetenzen
+Das Projekt demonstrierte umfassende **Full-Stack Entwicklung**:
+- **Native iOS**: SwiftUI, AVFoundation, Speech Framework, ActivityKit
+- **Web-Frontend**: HTML5, CSS3, JavaScript, Responsive Design
+- **UX/UI Design**: Konsistente Designsysteme, Accessibility, Performance
+- **DevOps**: Git-Workflow, TestFlight Distribution, Continuous Integration
+
+### Innovative Aspekte
+1. **Early iOS 26 Adoption**: Pionier-Nutzung neuer Apple-Technologien
+2. **Ganzheitlicher Ansatz**: App + Website + Community als Ecosystem
+3. **Academic Excellence**: Professionelle Standards in universitärem Kontext
+4. **Open Development**: Transparente Entwicklung mit öffentlichem Beta-Testing
+
+Das Projekt zeigt, wie eine klare Vision (Traumdokumentation) durch iterative Entwicklung, technologische Innovation und strategisches Marketing zu einem einzigartigen digitalen Produkt werden kann, das sowohl funktional als auch ästhetisch überzeugt.
+
+**Dreams ist mehr als eine App - es ist ein komplettes digitales Ecosystem für die Erforschung unserer nächtlichen Gedankenwelt.** 🌙✨
 
 ---
 
