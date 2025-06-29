@@ -297,5 +297,6 @@ struct ToastTesterView_Previews: PreviewProvider {
     static var previews: some View {
         ToastTesterView()
             .withToasts()
+            .preferredColorScheme(.dark)
     }
 }

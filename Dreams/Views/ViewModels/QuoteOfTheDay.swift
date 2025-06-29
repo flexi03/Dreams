@@ -5,13 +5,6 @@
 //  Created by Felix Kircher on 21.04.25.
 //
 
-//
-//  QuoteOfTheDay.swift
-//  Dreams
-//
-//  Created by Felix Kircher on 21.04.25.
-//
-
 import SwiftUI
 
 struct QuoteOfTheDay: View {
