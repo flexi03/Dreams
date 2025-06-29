@@ -7,7 +7,7 @@
 
 **Dreams** ist eine innovative iOS-App für die Dokumentation und Analyse von Träumen, entwickelt von **Felix Kircher** im Rahmen des Moduls "Mediengestaltung 2" an der Hochschule Düsseldorf (HSD). 
 
-**🎯 Kernidee**: Eine moderne, intuitive App zur systematischen Erfassung von Träumen mit Audio-Aufnahmen, KI-Transkription und umfangreichen Analyse-Features.
+**🎯 Kernidee**: Eine moderne, intuitive App zur Erfassung von Träumen mit Audio-Aufnahmen, KI-Transkription und umfangreichen Analyse-Features.
 
 **🔗 Links:**
 - **TestFlight Beta**: https://testflight.apple.com/join/AU1CmRfH
@@ -17,7 +17,7 @@
 
 ## 🎨 Entstehungsgeschichte
 
-### Akademischer Hintergrund
+### Hintergrund
 Das Projekt entstand im **Mediengestaltung 2 Modul** an der HSD mit dem übergeordneten Thema **"Traum"**. Aufgrund vorhandener Erfahrung in SwiftUI/iOS-Entwicklung fiel die Entscheidung auf eine native iOS-App.
 
 ### Design-Philosophie
@@ -25,7 +25,7 @@ Die ersten Entwürfe wurden skizziert und sehr nah an der ursprünglichen Vision
 
 ### Technologische Entwicklung
 - **Startphase**: Klassisches SwiftUI-Design
-- **Pivot**: Migration zu iOS 26 Beta mit Glassy Design
+- **Design-anpassung**: Migration zu iOS 26 Beta mit Glassy Design
 - **Fokus**: Moderne, glasige UI-Elemente für traumhafte Atmosphäre
 
 ---
@@ -35,11 +35,11 @@ Die ersten Entwürfe wurden skizziert und sehr nah an der ursprünglichen Vision
 ### Core Technologies
 ```swift
 // Haupt-Framework
-SwiftUI (iOS 26+)
+SwiftUI (iOS App-Sprache)
 AVFoundation (Audio)
 Speech Framework (Transkription)
 ActivityKit (Live Activities)
-UserDefaults (Persistierung)
+UserDefaults (Datenspeicherung)
 ```
 
 ### Architektur-Pattern
@@ -68,17 +68,16 @@ struct DreamEntry {
 ## ✨ Feature-Übersicht
 
 ### 🎤 Audio-Aufnahme & Transkription
-- **Sprachaufzeichnung** für spontane Traumerinnerungen
+- **Sprachaufzeichnung** für schnelle Traumeinträge
 - **Automatische Transkription** via Speech Framework
 - **Kombinierte Inhalte**: Text + Audio + Transkript
-- **Content-Type Indikatoren** zur Unterscheidung
 
 ### 📊 Erweiterte Statistiken
 - **GitGrid**: GitHub-inspirierte Aktivitätsvisualisierung
 - **Streak-System**: Aufeinanderfolgende Traumtage
 - **Mood-Tracking**: Emotionale Muster über Zeit
 - **Schlafqualitäts-Analyse**: Mond-basierte Bewertung
-- **Tag-Clouds**: Häufigste Traumthemen
+- **Tags**: Häufigste Traumthemen
 - **Detaillierte Insights**: Umfassende Datenanalyse
 
 ### 🎫 DreamPass System
@@ -89,10 +88,10 @@ struct DreamEntry {
 - Persistente Design-Speicherung
 - Share-Funktionalität als Bild
 - Animierte UI-Elemente
+- Exportmöglichkeit für Interaktion mit Anderen
 ```
 
 ### 📱 Live Activities
-- **iOS 26 Widget Integration**
 - **Echtzeit Streak-Anzeige**
 - **Tagesziel-Tracking**
 - **Auto-Start Funktionalität**
@@ -100,13 +99,12 @@ struct DreamEntry {
 ### 🌙 Quote of the Day
 - **Kuratierte deutsche Traumzitate**
 - **Intelligente Lade-Logik**: Nur einmal täglich
-- **Offline-Funktionalität**
 - **30+ handverlesene Zitate** von Freud bis Hesse
 
 ### 🔧 Debug & Toast System
-- **Umfassendes Toast-System** für User-Feedback
+- **Umfassendes Toast-System** für User-Feedback (Pop-Up-Benachrichtigungen in App)
 - **Debug-Modus** für erweiterte Funktionen
-- **Intelligente Filterung**: LiveActivity-Toasts automatisch debug-only
+- **Intelligente Filterung**: Debug Toasts automatisch in debug-only
 - **Detaillierte App-Informationen**
 
 ---
@@ -114,11 +112,11 @@ struct DreamEntry {
 ## 🎨 UI/UX Design
 
 ### Design-Sprache
-- **iOS 26 Glassy Design** als Basis
-- **Dark Mode Only** für traumhafte Atmosphäre
 - **Lila/Purple Akzentfarbe** durchgehend
-- **Mond-Iconographie** statt Sterne
+- **Dark Mode Only** für traumhafte Atmosphäre
 - **Fließende Animationen** und Übergänge
+- **Mond-Iconographie** statt Sterne
+- **iOS 26 Glassy Design** als Basis
 
 ### Navigation-Architektur
 ```
@@ -151,7 +149,7 @@ TabView (Haupt-Navigation)
 - Träume: JSON-encoded Array
 - Einstellungen: @AppStorage Properties
 - DreamPass: Persistente Design-Daten
-- Quotes: Cached für Offline-Nutzung
+- Quotes: Cached
 ```
 
 ### Audio-Management
@@ -170,19 +168,18 @@ TabView (Haupt-Navigation)
 - ✅ Basis-UI mit SwiftUI
 - ✅ Traum-Eingabe und -verwaltung
 - ✅ Audio-Aufnahme Integration
-- ✅ Einfache Statistiken
 
-### Phase 2: iOS 26 Migration
+### Phase 2: Feature-Erweiterung
+- ✅ Quote of the Day System (Wechsel von API zu lokal)
+- ✅ Toast-Management
+- ✅ Erweiterte Statistiken
+- ✅ GitGrid Visualisierung
+
+### Phase 3: iOS 26 Migration
 - ✅ Glassy Design Implementation
 - ✅ Erweiterte Animations-Features
 - ✅ Performance-Optimierungen
 - ✅ Modern UI Components
-
-### Phase 3: Feature-Erweiterung
-- ✅ Quote of the Day System
-- ✅ Toast-Management
-- ✅ Erweiterte Statistiken
-- ✅ GitGrid Visualisierung
 
 ### Phase 4: Premium Features
 - ✅ DreamPass System
@@ -226,18 +223,6 @@ TabView (Haupt-Navigation)
 **Problem**: Verschiedene Toast-Typen und Debug-Filterung
 **Lösung**: Intelligente Keyword-basierte Filterung
 
-### 5. Website Responsive Design Herausforderungen
-**Problem**: Buttons erschienen auf verschiedenen Geräten inkonsistent
-**Lösung**: Inline-Flexbox mit strategischen `!important` CSS-Regeln
-
-### 6. Mobile Navigation UX
-**Problem**: Standard Burger-Menü war funktional und visuell mangelhaft
-**Lösung**: Custom Mobile Overlay mit perfekt zentriertem X-Button und glasigem Design
-
-### 7. Cross-Device Feature-Card Layout
-**Problem**: Suboptimale Platznutzung auf verschiedenen Bildschirmgrößen
-**Lösung**: Adaptive CSS Grid mit geräte-spezifischen Breakpoints
-
 ---
 
 ## 🎯 Innovative Features
@@ -259,29 +244,13 @@ TabView (Haupt-Navigation)
 
 ---
 
-## 🌟 Besonderheiten & Alleinstellungsmerkmale
-
-1. **iOS 26 Early Adopter**: Einer der ersten Apps mit Glassy Design
-2. **Ganzheitlicher Ansatz**: Audio + Text + Analyse in einem
-3. **Deutsche Lokalisierung**: Kuratierte Traumzitate und UI
-4. **Akademischer Hintergrund**: Entstanden in universitärem Kontext
-5. **Open Beta**: Transparente Entwicklung mit Community-Feedback
-
----
-
 ## 📚 Technische Spezifikationen
 
 ### Minimum Requirements
-- **iOS 26.0+** (Developer Beta)
-- **iPhone/iPad** compatible
+- **iOS 18.5+** (Besser iOS 26 Developer Beta)
+- **Xcode 16.x** (Besser auch hier Xcode 26)
+- **iPhone/iPad** 
 - **Mikrofon-Zugriff** für Audio-Features
-- **~50MB** Speicherplatz
-
-### Performance Metrics
-- **Startup Time**: <2s auf modernen Geräten
-- **Audio Latency**: <100ms für Aufnahme-Start
-- **UI Responsiveness**: 60fps mit Glassy Effects
-- **Memory Footprint**: ~30MB durchschnittlich
 
 ---
 
@@ -329,10 +298,6 @@ Das Website-Projekt brachte umfangreiche **Responsive Design Herausforderungen**
 - **iPad Hochformat** (768px): 2 Karten pro Reihe
 - **Mobile** (480px): 1 Karte pro Reihe mit kompakterem Design
 
-#### 4. Code Carousel Touch-Funktionalität
-**Problem**: Fehlende Touch/Swipe Unterstützung für mobile Geräte
-**Lösung**: Apple-inspirierte Swipe-Gesten mit Multi-Touch Support und Spring-Animationen
-
 ### CSS-Architektur
 ```css
 /* Moderne CSS-Patterns */
@@ -350,7 +315,6 @@ Das Website-Projekt brachte umfangreiche **Responsive Design Herausforderungen**
 ```
 
 ### JavaScript Interaktions-Features
-- **Touch/Swipe Gestures**: Apple-like Smooth Animations
 - **Burger Menu Logic**: State-Management mit CSS Classes
 - **Responsive Image Handling**: Adaptive Content-Loading
 - **Smooth Scrolling**: Section-Navigation mit Offset-Berechnung
@@ -366,29 +330,14 @@ Das Website-Projekt brachte umfangreiche **Responsive Design Herausforderungen**
 <meta property="twitter:card" content="summary_large_image">
 ```
 
-### Performance-Optimierungen
-- **CSS Minification**: Optimierte Ladezeiten
-- **Image Optimization**: WebP/PNG Hybrid-Ansatz  
-- **Lazy Loading**: Conditional Content-Loading
-- **Cache Strategies**: Browser-Caching für statische Assets
-
-### Accessibility Features
-- **Semantic HTML**: Proper heading hierarchy
-- **ARIA Labels**: Screen-reader Unterstützung
-- **Keyboard Navigation**: Tab-Index Optimierung
-- **Color Contrast**: WCAG 2.1 AA Compliance
-
 ### Integration mit App-Ecosystem
 Die Website dient als **zentraler Hub** für:
 1. **TestFlight Beta Downloads**: Direkte Links zur App
 2. **GitHub Repository**: Open-Source Code-Zugriff
-3. **Projekt-Dokumentation**: Diese Doku als PDF/Markdown
+3. **Projekt-Dokumentation**: Diese Doku als Markdown-Datei
 4. **Feature-Demonstration**: Interaktive Showcases
-5. **Community Building**: Beta-Tester Akquisition
 
-### Marketing-Impact
-- **Professional Presence**: Erhöht Glaubwürdigkeit der App
-- **SEO Benefits**: Auffindbarkeit in Suchmaschinen
+### Visual-Impact
 - **Showcase Platform**: Portfolio-Integration für Entwickler
 - **Beta-Tester Akquisition**: Streamlined Onboarding-Prozess
 
@@ -398,12 +347,11 @@ Die Website dient als **zentraler Hub** für:
 
 ### Geplante Features
 - **iCloud Sync** für Geräte-übergreifende Nutzung
-- **Apple Watch App** für schnelle Traum-Notizen
 - **Erweiterte AI-Analyse** für Traummuster
 - **Social Features** zum Teilen von Insights
 
 ### Technische Evolution
-- **iOS 27 Readiness** für kommende Features
+- **iOS XX Readiness** für kommende Features
 - **Performance Optimierungen** für ältere Geräte
 - **Accessibility Improvements** für breitere Nutzung
 - **Widget-Erweiterungen** für Home Screen
@@ -414,7 +362,7 @@ Die Website dient als **zentraler Hub** für:
 
 **Felix Kircher**
 - **Institution**: Hochschule Düsseldorf (HSD)
-- **Studiengang**: Mediengestaltung
+- **Studiengang**: Medieninformatik
 - **Spezialisierung**: iOS/SwiftUI Entwicklung
 - **Projekt-Zeitraum**: 2024/2025
 - **Technologie-Focus**: iOS 26, SwiftUI, Audio/Speech APIs
@@ -423,28 +371,15 @@ Die Website dient als **zentraler Hub** für:
 
 ## 🏆 Fazit
 
-Dreams repräsentiert eine erfolgreiche Verbindung von **akademischem Projekt** und **professioneller App-Entwicklung**. Das Projekt umfasst nicht nur die iOS-App selbst, sondern auch eine vollständige **digitale Präsenz** mit moderner Website und umfassendem Marketing-Ecosystem.
-
-### Technische Errungenschaften
-- **iOS-App**: Cutting-edge SwiftUI mit iOS 26 Glassy Design
-- **Website**: Responsive Design mit Apple-inspirierten Interaktionen
-- **Cross-Platform Konsistenz**: Einheitliche Design-Sprache über alle Plattformen
-- **Open-Source Ansatz**: Transparente Entwicklung mit Community-Feedback
+Dreams repräsentiert eine erfolgreiche Verbindung von **akademischem Projekt** und **professioneller App-Entwicklung**. Das Projekt umfasst nicht nur die iOS-App selbst, sondern auch eine vollständige **digitale Präsenz** mit moderner Website.
 
 ### Lerneffekte & Kompetenzen
 Das Projekt demonstrierte umfassende **Full-Stack Entwicklung**:
+- **Design**: Von der Skizze zum Produkt
 - **Native iOS**: SwiftUI, AVFoundation, Speech Framework, ActivityKit
 - **Web-Frontend**: HTML5, CSS3, JavaScript, Responsive Design
 - **UX/UI Design**: Konsistente Designsysteme, Accessibility, Performance
 - **DevOps**: Git-Workflow, TestFlight Distribution, Continuous Integration
-
-### Innovative Aspekte
-1. **Early iOS 26 Adoption**: Pionier-Nutzung neuer Apple-Technologien
-2. **Ganzheitlicher Ansatz**: App + Website + Community als Ecosystem
-3. **Academic Excellence**: Professionelle Standards in universitärem Kontext
-4. **Open Development**: Transparente Entwicklung mit öffentlichem Beta-Testing
-
-Das Projekt zeigt, wie eine klare Vision (Traumdokumentation) durch iterative Entwicklung, technologische Innovation und strategisches Marketing zu einem einzigartigen digitalen Produkt werden kann, das sowohl funktional als auch ästhetisch überzeugt.
 
 **Dreams ist mehr als eine App - es ist ein komplettes digitales Ecosystem für die Erforschung unserer nächtlichen Gedankenwelt.** 🌙✨
 
