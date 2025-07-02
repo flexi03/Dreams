@@ -132,7 +132,8 @@ struct DreamJournalView: View {
                         Image(systemName: "plus")
                             .bold()
                     } else {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
+                            .bold()
                             .symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }

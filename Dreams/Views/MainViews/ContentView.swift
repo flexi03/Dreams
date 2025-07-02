@@ -8,10 +8,6 @@
 import SwiftUI
 import AVFoundation // Für Sprachaufnahme
 
-// Diktieren
-
-
-
 // 4. Haupt-View mit TabBar
 struct ContentView: View {
     @StateObject private var store = DreamStoreSampleData()

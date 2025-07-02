@@ -308,4 +308,5 @@ struct AppDebugView: View {
     SettingsView()
         .environmentObject(DreamActivityManager())
         .environmentObject(DreamStoreSampleData())
+        .preferredColorScheme(.dark)
 }

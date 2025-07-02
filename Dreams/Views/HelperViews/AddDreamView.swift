@@ -101,4 +101,5 @@ struct AddDreamView: View {
 
 #Preview {
     AddDreamView()
+        .preferredColorScheme(.dark)
 }
